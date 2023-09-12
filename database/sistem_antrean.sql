@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 12, 2023 at 05:13 AM
+-- Generation Time: Sep 12, 2023 at 07:30 AM
 -- Server version: 8.0.30
 -- PHP Version: 7.2.9
 
@@ -35,6 +35,17 @@ CREATE TABLE `antrean` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `pelayanan`
+--
+
+CREATE TABLE `pelayanan` (
+  `id` int NOT NULL,
+  `pelayanan` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -43,7 +54,7 @@ CREATE TABLE `users` (
   `nama_lengkap` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
-  `role` enum('cs','panitia') DEFAULT NULL
+  `role` enum('cs','panitia','admin') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -54,6 +65,12 @@ CREATE TABLE `users` (
 -- Indexes for table `antrean`
 --
 ALTER TABLE `antrean`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pelayanan`
+--
+ALTER TABLE `pelayanan`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -70,6 +87,12 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `antrean`
 --
 ALTER TABLE `antrean`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `pelayanan`
+--
+ALTER TABLE `pelayanan`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
