@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 12, 2023 at 07:30 AM
+-- Generation Time: Sep 12, 2023 at 01:32 PM
 -- Server version: 8.0.30
 -- PHP Version: 7.2.9
 
@@ -35,13 +35,39 @@ CREATE TABLE `antrean` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `loket`
+--
+
+CREATE TABLE `loket` (
+  `id` int NOT NULL,
+  `pelayanan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `loket` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `loket`
+--
+
+INSERT INTO `loket` (`id`, `pelayanan`, `loket`) VALUES
+(1, 'verifikasi', 'loket 1');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `pelayanan`
 --
 
 CREATE TABLE `pelayanan` (
-  `id` int NOT NULL,
   `pelayanan` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pelayanan`
+--
+
+INSERT INTO `pelayanan` (`pelayanan`) VALUES
+('perbaikan data\r\n'),
+('verifikasi');
 
 -- --------------------------------------------------------
 
@@ -68,10 +94,17 @@ ALTER TABLE `antrean`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `loket`
+--
+ALTER TABLE `loket`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pelayanan` (`pelayanan`);
+
+--
 -- Indexes for table `pelayanan`
 --
 ALTER TABLE `pelayanan`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`pelayanan`);
 
 --
 -- Indexes for table `users`
@@ -90,16 +123,26 @@ ALTER TABLE `antrean`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `pelayanan`
+-- AUTO_INCREMENT for table `loket`
 --
-ALTER TABLE `pelayanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `loket`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `loket`
+--
+ALTER TABLE `loket`
+  ADD CONSTRAINT `loket_ibfk_1` FOREIGN KEY (`pelayanan`) REFERENCES `pelayanan` (`pelayanan`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
