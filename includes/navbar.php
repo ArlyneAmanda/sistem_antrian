@@ -58,7 +58,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="../pages/admin/layarAntrean.php">
-                        <i class="fas fa-user"></i> Layar Antrian
+                        <i class=" fas fa-solid fa-display"></i> Layar Antrian
                     </a>
                 </li>
             </ul>

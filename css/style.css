@@ -1,0 +1,12 @@
+.img1{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 350px;
+}
+.img2{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 350px;
+}

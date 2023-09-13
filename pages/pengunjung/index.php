@@ -8,10 +8,11 @@
     <style>
         .img1{
             position: absolute;
-            left: 0;
+            right: 0;
             bottom: 0;
             width: 350px;
         }
+        
     </style>
 </head>
   <body>
@@ -26,7 +27,7 @@
 
 
 
-    <img src="../../images/CSpics.png" alt="" class="img1">
+    <img src="../../images/pengunjungpics.png" alt="" class="img1">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
   </body>
 </html>
