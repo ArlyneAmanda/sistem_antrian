@@ -1,5 +1,21 @@
 <?php
 require '../../koneksi.php';
+
+session_start();
+
+// Periksa apakah pengguna sudah login sebagai Admin
+if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "Admin") {
+    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+    header("Location: ../login.php");
+    exit();
+}
+
+// Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
+$username = $_SESSION["username"];
+
+// Tampilkan halaman admin dengan informasi yang sesuai
+// ...
+
 ?>
 
 <!DOCTYPE html>
@@ -21,29 +37,27 @@ require '../../koneksi.php';
 
 <body>
     <div class="container mt-5">
-       <!-- Baris untuk satu baris dengan dua kotak -->
-    <div class="row">
-        <!-- Kotak "Jumlah Antrean" di sebelah kiri -->
-        <div class="col-md-6">
-            <div class="card mb-4 bg-success text-white">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Jumlah Antrean</h5>
-                    <p class="card-text">123</p>
+        <!-- Baris untuk satu baris dengan dua kotak -->
+        <div class="row">
+            <!-- Kotak "Jumlah Antrean" di sebelah kiri -->
+            <div class="col-md-6">
+                <div class="card mb-4 bg-success text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Jumlah Antrean</h5>
+                        <p class="card-text">123</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Kotak "Antrean Tersisa" di sebelah kanan -->
+            <div class="col-md-6">
+                <div class="card mb-4 bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Antrean Tersisa</h5>
+                        <p class="card-text">45</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- Kotak "Antrean Tersisa" di sebelah kanan -->
-        <div class="col-md-6">
-            <div class="card mb-4 bg-primary text-white">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Antrean Tersisa</h5>
-                    <p class="card-text">45</p>
-                </div>
-            </div>
-        
-</div>
-</div>
-
 
         <!-- Tabel untuk menampilkan data antrean -->
         <table class="table mt-4" id="antreanTable">
@@ -57,8 +71,6 @@ require '../../koneksi.php';
             <tbody>
                 <?php
                 // Koneksi ke database
-                
-
                 // Query SQL untuk mengambil data dari tabel pelayanan
                 $query = "SELECT * FROM layanan";
                 $result = $koneksi->query($query);
@@ -86,17 +98,17 @@ require '../../koneksi.php';
         <!-- Tombol "Tambah Menu" di bawah tabel -->
         <div class="text-center mt-3">
             <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Menu</button>
+            <a href="logout.php" class="btn btn-danger ml-3">Log Out</a>
         </div>
-        
+
         <!-- Tombol Hapus Data dan Tombol Register -->
         <div class="text-center mt-3">
             <button class="btn btn-danger" id="hapusSemuaData">
                 <i class="bi bi-trash"></i> Hapus Semua Data
             </button>
             <a href="register.php" class="btn btn-success ml-3">
-             Register Akun
+                Register Akun
             </a>
-
         </div>
     </div>
 
@@ -112,15 +124,15 @@ require '../../koneksi.php';
                 </div>
                 <div class="modal-body">
                     <form id="formTambahMenu">
-                    <div class="form-group">
-    <label for="kodeLayanan">Kode Layanan</label>
-    <input type="text" class="form-control" id="kodeLayanan" name="kodeLayanan" required>
-</div>
-
-        <div class="form-group">
-            <label for="namaMenu">Nama Menu</label>
-            <input type="text" class="form-control" id="namaMenu" name="namaMenu" required>
-        </div>
+                        <div class="form-group">
+                            <label for="kodeLayanan">Kode Layanan</label>
+                            <input type="text" class="form-control" id="kodeLayanan" name="kodeLayanan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="namaMenu">Nama Menu</label>
+                            <input type="text" class="form-control" id="namaMenu" name="namaMenu" required>
+                        </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                     <button type="button" class="btn btn-primary" id="tambahkanMenu">Tambahkan</button>
@@ -129,26 +141,25 @@ require '../../koneksi.php';
         </div>
     </div>
 
-   <!-- Modal Notifikasi -->
-<div class="modal fade" id="notifModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Notifikasi</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Data berhasil ditambahkan!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+    <!-- Modal Notifikasi -->
+    <div class="modal fade" id="notifModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Notifikasi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Data berhasil ditambahkan!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 
     <!-- Tambahkan script Bootstrap, jQuery, dan DataTables di sini -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -158,93 +169,93 @@ require '../../koneksi.php';
 
     <!-- Inisialisasi DataTables -->
     <script>
-    $(document).ready(function() {
-        $('#antreanTable').DataTable();
+        $(document).ready(function() {
+            $('#antreanTable').DataTable();
 
-        // Event handler untuk tombol "Tambahkan" pada modal diklik
-        $("#tambahkanMenu").click(function() {
-            var kodeLayanan = $("#kodeLayanan").val();
-             var namaMenu = $("#namaMenu").val();
-            $.ajax({
-                type: "POST",
-                url: "tambah_menu.php", // Ganti dengan path ke script PHP yang akan menambahkan data
-                data: {
-                    kodeLayanan: kodeLayanan,
-                    namaMenu: namaMenu
-                },
-              // ...
+            // Event handler untuk tombol "Tambahkan" pada modal diklik
+            $("#tambahkanMenu").click(function() {
+                var kodeLayanan = $("#kodeLayanan").val();
+                var namaMenu = $("#namaMenu").val();
+                $.ajax({
+                    type: "POST",
+                    url: "tambah_menu.php", // Ganti dengan path ke script PHP yang akan menambahkan data
+                    data: {
+                        kodeLayanan: kodeLayanan,
+                        namaMenu: namaMenu
+                    },
+                    // ...
 
-            success: function(response) {
-                console.log(response); // Ini akan menampilkan response dari server di konsol browser
-                // Tampilkan modal notifikasi
-                $('#notifModal').modal('show');
+                    success: function(response) {
+                        console.log(response); // Ini akan menampilkan response dari server di konsol browser
+                        // Tampilkan modal notifikasi
+                        $('#notifModal').modal('show');
 
-                // Tutup modal
-                $('#tambahMenuModal').modal('hide');
+                        // Tutup modal
+                        $('#tambahMenuModal').modal('hide');
 
-                // Refresh halaman setelah 3 detik
-                setTimeout(function() {
-                    location.reload();
-                }, 1000); // Refresh setelah 3 detik (1000 milidetik)
-            },
+                        // Refresh halaman setelah 3 detik
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000); // Refresh setelah 3 detik (1000 milidetik)
+                    },
 
-// ...
+                    // ...
 
-                error: function(xhr, textStatus, errorThrown) {
-                    console.error(xhr.responseText);
-                    // Tambahkan kode di sini untuk menangani kesalahan
+                    error: function(xhr, textStatus, errorThrown) {
+                        console.error(xhr.responseText);
+                        // Tambahkan kode di sini untuk menangani kesalahan
+                    }
+                });
+            });
+
+            // Event handler untuk tombol "Hapus"
+            $(".hapus-data").click(function() {
+                var idData = $(this).data("id");
+                if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "hapus_menu.php", // Ganti dengan path ke script PHP yang akan menghapus data
+                        data: {
+                            id: idData
+                        },
+                        success: function(response) {
+                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                            console.log(response);
+                            // Refresh halaman setelah 3 detik
+                            setTimeout(function() {
+                                location.reload();
+                            }, 500); // Refresh setelah 3 detik (500 milidetik)
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(xhr.responseText);
+                            // Tambahkan kode di sini untuk menangani kesalahan
+                        }
+                    });
+                }
+            });
+
+            // Event handler untuk tombol "Hapus Semua Data"
+            $("#hapusSemuaData").click(function() {
+                if (confirm("Apakah Anda yakin ingin menghapus semua data?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "hapus_semua_data.php", // Ganti dengan path ke script PHP yang akan menghapus semua data
+                        success: function(response) {
+                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                            console.log(response);
+                            // Refresh halaman setelah 3 detik
+                            setTimeout(function() {
+                                location.reload();
+                            }, 500); // Refresh setelah 3 detik (500 milidetik)
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(xhr.responseText);
+                            // Tambahkan kode di sini untuk menangani kesalahan
+                        }
+                    });
                 }
             });
         });
-
-        // Event handler untuk tombol "Hapus"
-        $(".hapus-data").click(function() {
-            var idData = $(this).data("id");
-            if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-                $.ajax({
-                    type: "POST",
-                    url: "hapus_menu.php", // Ganti dengan path ke script PHP yang akan menghapus data
-                    data: {
-                        id: idData
-                    },
-                    success: function(response) {
-                        // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
-                        console.log(response);
-                        // Refresh halaman setelah 3 detik
-                        setTimeout(function() {
-                            location.reload();
-                        }, 500); // Refresh setelah 3 detik (3000 milidetik)
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        console.error(xhr.responseText);
-                        // Tambahkan kode di sini untuk menangani kesalahan
-                    }
-                });
-            }
-        });
-
-        // Event handler untuk tombol "Hapus Semua Data"
-        $("#hapusSemuaData").click(function() {
-            if (confirm("Apakah Anda yakin ingin menghapus semua data?")) {
-                $.ajax({
-                    type: "POST",
-                    url: "hapus_semua_data.php", // Ganti dengan path ke script PHP yang akan menghapus semua data
-                    success: function(response) {
-                        // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
-                        console.log(response);
-                        // Refresh halaman setelah 3 detik
-                        setTimeout(function() {
-                            location.reload();
-                        }, 500); // Refresh setelah 3 detik (3000 milidetik)
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        console.error(xhr.responseText);
-                        // Tambahkan kode di sini untuk menangani kesalahan
-                    }
-                });
-            }
-        });
-    });
     </script>
 </body>
 </html>

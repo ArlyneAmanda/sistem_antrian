@@ -1,7 +1,26 @@
 <?php
+require '../../koneksi.php';
+
+session_start();
+
+// Periksa apakah pengguna sudah login sebagai Admin
+if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "Admin") {
+    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+    header("Location: ../login.php");
+    exit();
+}
+
+// Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
+$username = $_SESSION["username"];
+
+// Tampilkan halaman admin dengan informasi yang sesuai
+// ...
+
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Koneksi ke database
-    require '../../koneksi.php';
+
 
     // Ambil data dari formulir
     $nama_lengkap = $_POST['nama_lengkap'];
