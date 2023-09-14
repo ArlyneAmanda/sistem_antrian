@@ -13,5 +13,6 @@ $conn = mysqli_connect($host, $username, $password, $database);
 // Periksa koneksi
 if ($koneksi->connect_error) {
     die("Koneksi database gagal: " . $koneksi->connect_error);
+
 }
 ?>
