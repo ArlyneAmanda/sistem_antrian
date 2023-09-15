@@ -6,12 +6,9 @@
     <title>Contoh Navbar Bootstrap 4</title>
     <!-- Tambahkan link ke CSS Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .navbar-brand {
-            font-weight: bold; /* Teks menjadi tebal */
-        }   
-    </style>
+    
 </head>
+<?php require'../includes/header.php'?>
     <nav class="navbar navbar-expand-lg navbar-light bg-custom">
         <a class="navbar-brand custom-font text-white" href="">Antrean PPDB</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

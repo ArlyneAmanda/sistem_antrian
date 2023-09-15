@@ -30,6 +30,7 @@
         }
         .btn-success,
         .btn-success {
+            background-color: #20c997; /* Ubah warna tombol menjadi #20c997 */
             font-size: 24px;
             padding: 20px 40px;
             margin-bottom: 30px;
@@ -43,6 +44,7 @@
             letter-spacing: 1px;
             font-weight: bold;
         }
+
         .btn-verifikasi:hover {
             background-color: #0056b3;
             box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
@@ -68,6 +70,12 @@
             margin-bottom: 30px;
             color: #666;
         }
+        .img1{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +87,8 @@
             <button class="btn btn-success btn-perbaikan">Perbaikan Data</button>
         </div>
     </div>
+
+    <img src="../../images/pengunjungpics.webp" alt="" class="img1">
 
     <!-- Include Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
