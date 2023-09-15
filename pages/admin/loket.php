@@ -46,36 +46,57 @@ $username = $_SESSION["username"];
 <body>
     <div class="container mt-5">
         <!-- Baris untuk satu baris dengan dua kotak -->
-        
+        <div class="row">
+            <!-- Kotak "Jumlah Antrean" di sebelah kiri -->
+            <div class="col-md-6">
+                <div class="card mb-4 bg-success text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Jumlah Antrean</h5>
+                        <p class="card-text">123</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Kotak "Antrean Tersisa" di sebelah kanan -->
+            <div class="col-md-6">
+                <div class="card mb-4 bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Antrean Tersisa</h5>
+                        <p class="card-text">45</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Tabel untuk menampilkan data antrean -->
         <table class="table mt-4" id="antreanTable">
             <thead>
                 <tr>
-                    <th>Kode Layanan</th>
-                    <th>Keterangan</th>
+                    <th>Nama</th>
+                    <th>Kode loket</th>
+                    <th>loket</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 // Koneksi ke database
-                // Query SQL untuk mengambil data dari tabel pelayanan
-                $query = "SELECT * FROM layanan";
+                // Query SQL untuk mengambil data dari tabel peLoket
+                $query = "SELECT * FROM loket";
                 $result = $conn->query($query);
 
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         echo '<tr>';
-                        echo '<td>' . $row['kode_layanan'] . '</td>';
-                        echo '<td>' . $row['nama_layanan'] . '</td>';
+                        echo '<td>' . $row['penjaga'] . '</td>';
+                        echo '<td>' . $row['kode_loket'] . '</td>';
+                        echo '<td>' . $row['nama_loket'] . '</td>';
                         echo '<td>';
                         echo '<button class="btn btn-danger hapus-data" data-id="' . $row['id'] . '">Hapus</button>';
                         echo '</td>';
                         echo '</tr>';
                     }
                 } else {
-                    echo "Tidak ada data pelayanan.";
+                    echo "Loket belum tersedia.";
                 }
 
                 // Tutup koneksi ke database
@@ -86,7 +107,7 @@ $username = $_SESSION["username"];
 
         <!-- Tombol "Tambah Menu" di bawah tabel -->
         <div class="text-center mt-3">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Menu</button>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Loket</button>
             <a href="logout.php" class="btn btn-danger ml-3">Log Out</a>
         </div>
 
@@ -106,7 +127,7 @@ $username = $_SESSION["username"];
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Menu</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Loket</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -114,11 +135,15 @@ $username = $_SESSION["username"];
                 <div class="modal-body">
                     <form id="formTambahMenu">
                         <div class="form-group">
-                            <label for="kodeLayanan">Kode Layanan</label>
-                            <input type="text" class="form-control" id="kodeLayanan" name="kodeLayanan" required>
+                            <label for="namaPenjaga">Nama Penjaga</label>
+                            <input type="text" class="form-control" id="namaPenjaga" name="namaPenjaga" required>
                         </div>
                         <div class="form-group">
-                            <label for="namaMenu">Nama Menu</label>
+                            <label for="kodeLoket">Kode Loket</label>
+                            <input type="text" class="form-control" id="kodeLoket" name="kodeLoket" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="namaMenu">Nama Loket</label>
                             <input type="text" class="form-control" id="namaMenu" name="namaMenu" required>
                         </div>
                 </div>
@@ -165,13 +190,15 @@ $username = $_SESSION["username"];
 
             // Event handler untuk tombol "Tambahkan" pada modal diklik
             $("#tambahkanMenu").click(function() {
-                var kodeLayanan = $("#kodeLayanan").val();
+                var namaPenjaga = $("#namaPenjaga").val();
+                var kodeLoket = $("#kodeLoket").val();
                 var namaMenu = $("#namaMenu").val();
                 $.ajax({
                     type: "POST",
                     url: "tambah_menu.php", // Ganti dengan path ke script PHP yang akan menambahkan data
                     data: {
-                        kodeLayanan: kodeLayanan,
+                        namaPenjaga: namaPenjaga,
+                        kodeLoket: kodeLoket,
                         namaMenu: namaMenu
                     },
                     // ...
