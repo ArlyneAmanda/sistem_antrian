@@ -1,3 +1,22 @@
+<?php
+// Kode untuk mengambil data menu dari tabel "menu_admin"
+// Lakukan koneksi ke database sesuai dengan pengaturan Anda
+require '../../koneksi.php';
+
+// Query SQL untuk mengambil data menu
+$sql = "SELECT * FROM layanan";
+$result = $conn->query($sql);
+
+$menuItems = array(); // Inisialisasi array untuk menampung data menu
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $menuItems[] = $row; // Menambahkan data menu ke dalam array
+    }
+}
+
+// Tutup koneksi ke database
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +25,8 @@
     <title>Antrean Pengunjung</title>
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
     <style>
         body {
             background-color: #f0f0f0;
@@ -77,21 +98,32 @@
             width: 300px;
         }
     </style>
+  
+
 </head>
 <body>
     <div class="container">
         <div class="judul">Selamat Datang di Layanan Kami</div>
         <div class="subjudul">Silakan pilih jenis layanan di bawah ini untuk mendapatkan nomor antrian Anda:</div>
         <div class="btn-container">
-            <button class="btn btn-success btn-verifikasi">Verifikasi</button>
-            <button class="btn btn-success btn-perbaikan">Perbaikan Data</button>
+            <?php
+            // Menampilkan tombol-tombol menu dari data yang diambil dari database
+            foreach ($menuItems as $menuItem) {
+                echo '<button class="btn btn-success btn-menu">' . $menuItem["nama_layanan"] . '</button>';
+            }
+            ?>
         </div>
     </div>
 
     <img src="../../images/pengunjungpics.webp" alt="" class="img1">
 
     <!-- Include Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    
+
+ 
 </body>
 </html>
