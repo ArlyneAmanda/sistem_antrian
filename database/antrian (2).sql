@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 15, 2023 at 01:57 AM
+-- Generation Time: Sep 15, 2023 at 04:01 AM
 -- Server version: 8.0.30
 -- PHP Version: 7.2.9
 
@@ -55,6 +55,7 @@ CREATE TABLE `layanan` (
 
 CREATE TABLE `loket` (
   `id` int NOT NULL,
+  `penjaga` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `nama_loket` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
   `kode_loket` varchar(10) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
