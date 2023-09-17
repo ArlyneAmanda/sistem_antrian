@@ -13,11 +13,26 @@ if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "Admin") {
 // Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
 $username = $_SESSION["username"];
 
-// Tampilkan halaman admin dengan informasi yang sesuai
-// ...
+// Fungsi untuk menambahkan data layanan
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isset($_POST["namaMenu"])) {
+    $kodeLayanan = $_POST["kodeLayanan"];
+    $namaMenu = $_POST["namaMenu"];
 
+    // Koneksi ke database
+    // Gantilah bagian ini dengan koneksi ke database Anda
+
+    // Query SQL untuk menambahkan data ke tabel layanan
+    $query = "INSERT INTO layanan (kode_layanan, nama_layanan) VALUES ('$kodeLayanan', '$namaMenu')";
+    if ($conn->query($query) === TRUE) {
+        echo "Data berhasil ditambahkan!";
+    } else {
+        echo "Error: " . $query . "<br>" . $conn->error;
+    }
+
+    // Tutup koneksi ke database
+    $conn->close();
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,7 +57,6 @@ $username = $_SESSION["username"];
         }
     </style>
 </head>
-<!--  -->
 <body>
     <div class="container mt-5">
         <!-- Baris untuk satu baris dengan dua kotak -->
@@ -53,7 +67,7 @@ $username = $_SESSION["username"];
             <thead>
                 <tr>
                     <th>Kode Layanan</th>
-                    <th>Keterangan</th>
+                    <th>Nama Layanan</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -118,7 +132,7 @@ $username = $_SESSION["username"];
                             <input type="text" class="form-control" id="kodeLayanan" name="kodeLayanan" required>
                         </div>
                         <div class="form-group">
-                            <label for="namaMenu">Nama Menu</label>
+                            <label for="namaMenu">Nama Layanan</label>
                             <input type="text" class="form-control" id="namaMenu" name="namaMenu" required>
                         </div>
                 </div>
@@ -169,13 +183,11 @@ $username = $_SESSION["username"];
                 var namaMenu = $("#namaMenu").val();
                 $.ajax({
                     type: "POST",
-                    url: "tambah_menu.php", // Ganti dengan path ke script PHP yang akan menambahkan data
+                    url: "index.php", // Ganti dengan path ke script PHP yang akan menambahkan data
                     data: {
                         kodeLayanan: kodeLayanan,
                         namaMenu: namaMenu
                     },
-                    // ...
-
                     success: function(response) {
                         console.log(response); // Ini akan menampilkan response dari server di konsol browser
                         // Tampilkan modal notifikasi
@@ -189,9 +201,6 @@ $username = $_SESSION["username"];
                             location.reload();
                         }, 1000); // Refresh setelah 3 detik (1000 milidetik)
                     },
-
-                    // ...
-
                     error: function(xhr, textStatus, errorThrown) {
                         console.error(xhr.responseText);
                         // Tambahkan kode di sini untuk menangani kesalahan
