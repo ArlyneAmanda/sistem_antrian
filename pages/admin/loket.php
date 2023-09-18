@@ -45,6 +45,14 @@ if (isset($_POST['tambah'])) {
 $query = "SELECT * FROM loket";
 $result = $conn->query($query);
 
+//query get user
+$queryUser = "SELECT username FROM user";
+$resultUser = $conn->query($queryUser);
+
+//query get layanan
+$queryLayanan = "SELECT nama_layanan FROM Layanan";
+$resultLayanan = $conn->query($queryLayanan);
+
 // Tutup koneksi ke database
 $conn->close();
 ?>
@@ -151,13 +159,29 @@ $conn->close();
                 </div>
                 <div class="modal-body">
                     <form id="formTambahMenu" method="post">
-                        <div class="form-group">
+                        <div class="form-group"> 
                             <label for="namaPetugas">Nama Petugas</label>
-                            <input type="text" class="form-control" id="namaPetugas" name="namaPetugas" required>
+                            <select class="form-control" id="namaPetugas" name="namaPetugas" required>
+                                <?php
+                                if ($resultUser->num_rows > 0) {
+                                    while ($rowUser = $resultUser->fetch_assoc()) {
+                                        echo '<option value="' . $rowUser['username'] . '">' . $rowUser['username'] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="namaLayanan">Nama Layanan</label>
-                            <input type="text" class="form-control" id="namaLayanan" name="namaLayanan" required>
+                            <select class="form-control" id="namaLayanan" name="namaLayanan" required>
+                            <?php
+                                if ($resultLayanan->num_rows > 0) {
+                                    while ($rowLayanan = $resultLayanan->fetch_assoc()) {
+                                        echo '<option value="' . $rowLayanan['nama_layanan'] . '">' . $rowLayanan['nama_layanan'] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="namaLoket">Nama Loket</label>
