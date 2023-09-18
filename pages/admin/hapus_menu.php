@@ -9,7 +9,7 @@ if (isset($_POST['id'])) {
     $query = "DELETE FROM layanan WHERE id = $id";
 
     // Eksekusi query
-    if ($koneksi->query($query) === TRUE) {
+    if ($conn->query($query) === TRUE) {
         echo "Data berhasil dihapus.";
     } else {
         echo "Error: " . $query . "<br>" . $koneksi->error;

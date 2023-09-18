@@ -6,7 +6,7 @@ require '../../koneksi.php';
 $query = "DELETE FROM layanan";
 
 // Eksekusi query
-if ($koneksi->query($query) === TRUE) {
+if ($conn->query($query) === TRUE) {
     echo "Semua data berhasil dihapus.";
 } else {
     echo "Error: " . $query . "<br>" . $koneksi->error;
