@@ -20,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Arahkan ke halaman yang sesuai berdasarkan peran (role)
             if ($_SESSION["role"] == "Admin") {
-                header("Location: admin/index.php");
+                header("Location: ../pages/admin/index.php");
             } elseif ($_SESSION["role"] == "CS") {
-                header("Location: cs.php");
+                header("Location: CS/index.php");
             }
             // Tambahkan kondisi lain jika perlu
 
