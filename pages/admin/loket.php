@@ -242,7 +242,53 @@ $conn->close();
                 });
             });
 
-            // ...
+            // Event handler untuk tombol "Hapus"
+            $(".hapus-data").click(function() {
+                var idData = $(this).data("id");
+                if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "hapus_loket.php", // Ganti dengan path ke script PHP yang akan menghapus data
+                        data: {
+                            id: idData
+                        },
+                        success: function(response) {
+                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                            console.log(response);
+                            // Refresh halaman setelah 3 detik
+                            setTimeout(function() {
+                                location.reload();
+                            }, 500); // Refresh setelah 3 detik (500 milidetik)
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(xhr.responseText);
+                            // Tambahkan kode di sini untuk menangani kesalahan
+                        }
+                    });
+                }
+            });
+
+            // Event handler untuk tombol "Hapus Semua Data"
+            $("#hapusSemuaData").click(function() {
+                if (confirm("Apakah Anda yakin ingin menghapus semua data?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "hapus_semua_data_loket.php", // Ganti dengan path ke script PHP yang akan menghapus semua data
+                        success: function(response) {
+                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                            console.log(response);
+                            // Refresh halaman setelah 3 detik
+                            setTimeout(function() {
+                                location.reload();
+                            }, 500); // Refresh setelah 3 detik (500 milidetik)
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(xhr.responseText);
+                            // Tambahkan kode di sini untuk menangani kesalahan
+                        }
+                    });
+                }
+            });
         });
     </script>
 </body>

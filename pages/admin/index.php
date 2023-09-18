@@ -205,7 +205,7 @@ $username = $_SESSION["username"];
                 if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
                     $.ajax({
                         type: "POST",
-                        url: "hapus_menu.php", // Ganti dengan path ke script PHP yang akan menghapus data
+                        url: "hapus_layanan.php", // Ganti dengan path ke script PHP yang akan menghapus data
                         data: {
                             id: idData
                         },
