@@ -1,6 +1,21 @@
 <?php
 require '../../koneksi.php';
 
+session_start();
+
+// Periksa apakah pengguna sudah login sebagai Admin
+if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "Admin") {
+    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+    header("Location: ../login.php");
+    exit();
+}
+
+// Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
+$username = $_SESSION["username"];
+
+// Tampilkan halaman admin dengan informasi yang sesuai
+// ...
+
 // Koneksi ke database
 if ($conn->connect_error) {
     die("Koneksi ke database gagal: " . $conn->connect_error);
@@ -8,12 +23,12 @@ if ($conn->connect_error) {
 
 if (isset($_POST['tambah'])) {
     $namaPetugas = $_POST['namaPetugas'];
-    $idLayanan = $_POST['idLayanan'];
+    $namaLayanan = $_POST['namaLayanan'];
     $namaLoket = $_POST['namaLoket'];
 
     // Prepared statement untuk menghindari SQL Injection
     $stmt = $conn->prepare("INSERT INTO loket(petugas, id_layanan, nama_loket) VALUES(?, ?, ?)");
-    $stmt->bind_param("sss", $namaPetugas, $idLayanan, $namaLoket);
+    $stmt->bind_param("sss", $namaPetugas, $namaLayanan, $namaLoket);
     
     if ($stmt->execute()) {
         // Data berhasil ditambahkan, tampilkan notifikasi
@@ -82,7 +97,7 @@ $conn->close();
             <thead>
                 <tr>
                     <th>Nama Petugas</th>
-                    <th>ID Layanan</th>
+                    <th>Nama Layanan</th>
                     <th>loket</th>
                     <th>Aksi</th>
                 </tr>
@@ -141,8 +156,8 @@ $conn->close();
                             <input type="text" class="form-control" id="namaPetugas" name="namaPetugas" required>
                         </div>
                         <div class="form-group">
-                            <label for="idLayanan">ID Layanan</label>
-                            <input type="text" class="form-control" id="idLayanan" name="idLayanan" required>
+                            <label for="namaLayanan">Nama Layanan</label>
+                            <input type="text" class="form-control" id="namaLayanan" name="namaLayanan" required>
                         </div>
                         <div class="form-group">
                             <label for="namaLoket">Nama Loket</label>
@@ -194,7 +209,7 @@ $conn->close();
             // Event handler untuk tombol "Tambahkan" pada modal diklik
             $("#tambahkanMenu").click(function() {
                 var namaPetugas = $("#namaPetugas").val();
-                var idLayanan = $("#idLayanan").val();
+                var namaLayanan = $("#namaLayanan").val();
                 var namaLoket = $("#namaLoket").val();
                 
                 $.ajax({
@@ -203,7 +218,7 @@ $conn->close();
                     data: {
                         tambah: true,
                         namaPetugas: namaPetugas,
-                        idLayanan: idLayanan,
+                        namaLayanan: namaLayanan,
                         namaLoket: namaLoket
                     },
                     success: function(response) {
