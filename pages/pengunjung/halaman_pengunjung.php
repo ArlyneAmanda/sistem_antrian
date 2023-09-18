@@ -1,5 +1,5 @@
 <?php
-// Kode untuk mengambil data menu dari tabel "menu_admin"
+// Kode untuk mengambil data menu dari tabel "layanan"
 // Lakukan koneksi ke database sesuai dengan pengaturan Anda
 require '../../koneksi.php';
 
@@ -98,8 +98,6 @@ $conn->close();
             width: 300px;
         }
     </style>
-  
-
 </head>
 <body>
     <div class="container">
@@ -109,7 +107,7 @@ $conn->close();
             <?php
             // Menampilkan tombol-tombol menu dari data yang diambil dari database
             foreach ($menuItems as $menuItem) {
-                echo '<button class="btn btn-success btn-menu">' . $menuItem["nama_layanan"] . '</button>';
+                echo '<button class="btn btn-success btn-menu" data-id="' . $menuItem["id"] . '">' . $menuItem["nama_layanan"] . '</button>';
             }
             ?>
         </div>
@@ -119,11 +117,69 @@ $conn->close();
 
     <!-- Include Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    
+    <script>
+        // Fungsi untuk menambahkan nomor antrian
+        function tambahkanNomorAntrian(idLayanan) {
+            $.ajax({
+                type: "POST",
+                url: "proses_antrian.php", // Ganti dengan path ke script PHP yang telah diperbarui
+                data: {
+                    id_layanan: idLayanan
+                },
+                dataType: "json", // Menyatakan bahwa server akan mengirimkan respons dalam format JSON
 
- 
+                success: function(response) {
+                    if (response.error) {
+                        alert("Terjadi kesalahan: " + response.error);
+                    } else {
+                        // Menampilkan nomor antrian dalam modal
+                        tampilkanNomorAntrian(response.nomor_antrian);
+                    }
+                },
+
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error(xhr.responseText);
+                    alert("Terjadi kesalahan saat mengirim permintaan AJAX.");
+                }
+            });
+        }
+
+        // Event handler untuk tombol menu
+        $(".btn-menu").click(function() {
+            var idLayanan = $(this).data("id");
+            tambahkanNomorAntrian(idLayanan);
+        });
+
+        // Fungsi untuk menampilkan nomor antrian dalam modal
+        function tampilkanNomorAntrian(nomorAntrian) {
+            // Munculkan modal dengan nomor antrian
+            $('#nomorAntrianModal').modal('show');
+            // Ubah isi modal dengan nomor antrian
+            $('#nomorAntrian').text(nomorAntrian);
+        }
+    </script>
+
+   <!-- Modal untuk menampilkan nomor antrian -->
+<div class="modal fade" id="nomorAntrianModal" tabindex="-1" role="dialog" aria-labelledby="nomorAntrianModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="nomorAntrianModalLabel">Nomor Antrian Anda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Nomor Antrian Anda adalah : <span id="nomorAntrian"></span><br> Nomor Antrian Anda Akan Segera Dicetak</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
