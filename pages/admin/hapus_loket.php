@@ -6,7 +6,7 @@ if (isset($_POST['id'])) {
     $id = $_POST['id'];
 
     // Buat query SQL untuk menghapus data berdasarkan ID
-    $query = "DELETE FROM layanan WHERE id = $id";
+    $query = "DELETE FROM loket WHERE id = $id";
 
     // Eksekusi query
     if ($conn->query($query) === TRUE) {

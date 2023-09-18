@@ -3,7 +3,7 @@
 require '../../koneksi.php';
 
 // Buat query SQL untuk menghapus semua data
-$query = "DELETE FROM layanan";
+$query = "DELETE FROM loket";
 
 // Eksekusi query
 if ($conn->query($query) === TRUE) {

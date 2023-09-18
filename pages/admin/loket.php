@@ -1,6 +1,21 @@
 <?php
 require '../../koneksi.php';
 
+session_start();
+
+// Periksa apakah pengguna sudah login sebagai Admin
+if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "Admin") {
+    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+    header("Location: ../login.php");
+    exit();
+}
+
+// Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
+$username = $_SESSION["username"];
+
+// Tampilkan halaman admin dengan informasi yang sesuai
+// ...
+
 // Koneksi ke database
 if ($conn->connect_error) {
     die("Koneksi ke database gagal: " . $conn->connect_error);
@@ -8,12 +23,12 @@ if ($conn->connect_error) {
 
 if (isset($_POST['tambah'])) {
     $namaPetugas = $_POST['namaPetugas'];
-    $idLayanan = $_POST['idLayanan'];
+    $namaLayanan = $_POST['namaLayanan'];
     $namaLoket = $_POST['namaLoket'];
 
     // Prepared statement untuk menghindari SQL Injection
     $stmt = $conn->prepare("INSERT INTO loket(petugas, id_layanan, nama_loket) VALUES(?, ?, ?)");
-    $stmt->bind_param("sss", $namaPetugas, $idLayanan, $namaLoket);
+    $stmt->bind_param("sss", $namaPetugas, $namaLayanan, $namaLoket);
     
     if ($stmt->execute()) {
         // Data berhasil ditambahkan, tampilkan notifikasi
@@ -29,6 +44,14 @@ if (isset($_POST['tambah'])) {
 // Query SQL untuk mengambil data dari tabel peLoket
 $query = "SELECT * FROM loket";
 $result = $conn->query($query);
+
+//query get user
+$queryUser = "SELECT username FROM user";
+$resultUser = $conn->query($queryUser);
+
+//query get layanan
+$queryLayanan = "SELECT nama_layanan FROM Layanan";
+$resultLayanan = $conn->query($queryLayanan);
 
 // Tutup koneksi ke database
 $conn->close();
@@ -82,7 +105,7 @@ $conn->close();
             <thead>
                 <tr>
                     <th>Nama Petugas</th>
-                    <th>ID Layanan</th>
+                    <th>Nama Layanan</th>
                     <th>loket</th>
                     <th>Aksi</th>
                 </tr>
@@ -136,13 +159,29 @@ $conn->close();
                 </div>
                 <div class="modal-body">
                     <form id="formTambahMenu" method="post">
-                        <div class="form-group">
+                        <div class="form-group"> 
                             <label for="namaPetugas">Nama Petugas</label>
-                            <input type="text" class="form-control" id="namaPetugas" name="namaPetugas" required>
+                            <select class="form-control" id="namaPetugas" name="namaPetugas" required>
+                                <?php
+                                if ($resultUser->num_rows > 0) {
+                                    while ($rowUser = $resultUser->fetch_assoc()) {
+                                        echo '<option value="' . $rowUser['username'] . '">' . $rowUser['username'] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label for="idLayanan">ID Layanan</label>
-                            <input type="text" class="form-control" id="idLayanan" name="idLayanan" required>
+                            <label for="namaLayanan">Nama Layanan</label>
+                            <select class="form-control" id="namaLayanan" name="namaLayanan" required>
+                            <?php
+                                if ($resultLayanan->num_rows > 0) {
+                                    while ($rowLayanan = $resultLayanan->fetch_assoc()) {
+                                        echo '<option value="' . $rowLayanan['nama_layanan'] . '">' . $rowLayanan['nama_layanan'] . '</option>';
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="namaLoket">Nama Loket</label>
@@ -194,7 +233,7 @@ $conn->close();
             // Event handler untuk tombol "Tambahkan" pada modal diklik
             $("#tambahkanMenu").click(function() {
                 var namaPetugas = $("#namaPetugas").val();
-                var idLayanan = $("#idLayanan").val();
+                var namaLayanan = $("#namaLayanan").val();
                 var namaLoket = $("#namaLoket").val();
                 
                 $.ajax({
@@ -203,7 +242,7 @@ $conn->close();
                     data: {
                         tambah: true,
                         namaPetugas: namaPetugas,
-                        idLayanan: idLayanan,
+                        namaLayanan: namaLayanan,
                         namaLoket: namaLoket
                     },
                     success: function(response) {
@@ -227,7 +266,53 @@ $conn->close();
                 });
             });
 
-            // ...
+            // Event handler untuk tombol "Hapus"
+            $(".hapus-data").click(function() {
+                var idData = $(this).data("id");
+                if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "hapus_loket.php", // Ganti dengan path ke script PHP yang akan menghapus data
+                        data: {
+                            id: idData
+                        },
+                        success: function(response) {
+                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                            console.log(response);
+                            // Refresh halaman setelah 3 detik
+                            setTimeout(function() {
+                                location.reload();
+                            }, 500); // Refresh setelah 3 detik (500 milidetik)
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(xhr.responseText);
+                            // Tambahkan kode di sini untuk menangani kesalahan
+                        }
+                    });
+                }
+            });
+
+            // Event handler untuk tombol "Hapus Semua Data"
+            $("#hapusSemuaData").click(function() {
+                if (confirm("Apakah Anda yakin ingin menghapus semua data?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "hapus_semua_data_loket.php", // Ganti dengan path ke script PHP yang akan menghapus semua data
+                        success: function(response) {
+                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                            console.log(response);
+                            // Refresh halaman setelah 3 detik
+                            setTimeout(function() {
+                                location.reload();
+                            }, 500); // Refresh setelah 3 detik (500 milidetik)
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.error(xhr.responseText);
+                            // Tambahkan kode di sini untuk menangani kesalahan
+                        }
+                    });
+                }
+            });
         });
     </script>
 </body>
