@@ -98,7 +98,11 @@ $conn->close();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <!-- Tambahkan ini di dalam bagian head -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <style>
+        /* .card.bg-success {
+            background-color: #20c997;
+        } */
+    </style>
 </head>
 <body>
 <?php include '../../includes/navbar.php'; ?>
@@ -106,24 +110,15 @@ $conn->close();
         <!-- Baris untuk satu baris dengan dua kotak -->
         <div class="row">
             <!-- Kotak "Jumlah Antrean" di sebelah kiri -->
-            <div class="col-md-6">
-                <div class="card mb-4 bg-success text-white">
+            <div class="col-md-6 mx-auto">
+                <div class="card mb-4" style="background-color: #20c997; color: white;">
                     <div class="card-body text-center">
                         <h5 class="card-title">Jumlah Antrean</h5>
                         <p class="card-text"><?php echo $jumlahAntrean; ?></p>
                     </div>
                 </div>
             </div>
-            <!-- Kotak "Antrean Tersisa" di sebelah kanan -->
-            <div class="col-md-6">
-                <div class="card mb-4 bg-primary text-white">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Antrean Tersisa</h5>
-                        <p class="card-text">45</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Tabel untuk menampilkan data antrean -->
         <table class="table mt-4" id="antreanTable">
@@ -155,20 +150,11 @@ $conn->close();
             </tbody>
         </table>
 
-        <!-- Tombol "Tambah Menu" di bawah tabel -->
-        <div class="text-center mt-3">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Loket</button>
-            <a href="logout.php" class="btn btn-danger ml-3">Log Out</a>
-        </div>
-
         <!-- Tombol Hapus Data dan Tombol Register -->
         <div class="text-center mt-3">
             <button class="btn btn-danger" id="hapusSemuaData" data-id="semuaData">
                 <i class="bi bi-trash"></i> Hapus Semua Antrian
             </button>
-            <a href="register.php" class="btn btn-success ml-3">
-                Register Akun
-            </a>
         </div>
     </div>
 

@@ -48,14 +48,15 @@
                     </a>
                 </li> -->
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="../pengunjung/halaman_pengunjung.php">
+                    <a class="nav-link text-white" href="../pengunjung/index.php">
                         <i class="fas fa-calendar-check"></i> Ambil Antrean
                     </a>
                 </li>   
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"                     aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-shield"></i> <!-- Ikon CS -->
                     CS
-                    </a>
+                </a>
                     <ul class="dropdown-menu">
                     <li class="dropdown-submenu">
                         <a class="dropdown-item" href="#"> Verifikasi<span
@@ -78,19 +79,38 @@
                     </li>
                     </ul>
                 </li>
+                <!-- Menu Loket dengan ikon -->
                 <li class="nav-item">
                     <a class="nav-link text-white" href="../admin/loket.php">
-                    <i class="fas fa-users-line"></i> Loket
+                        <i class="fas fa-door-open"></i> <!-- Ikon Loket -->
+                        Loket
                     </a>
                 </li>
+                <!-- Menu Pelayanan dengan ikon -->
                 <li class="nav-item">
                     <a class="nav-link text-white" href="../admin/layanan.php">
-                        <i class="fas fa-history"></i> Pelayanan
+                        <i class="fas fa-cogs"></i> <!-- Ikon Pelayanan -->
+                        Pelayanan
                     </a>
                 </li>
+                <!-- Menu Layar Antrian dengan ikon -->
                 <li class="nav-item">
                     <a class="nav-link text-white" href="../pengunjung/layarAntrean.php">
-                        <i class=" fas fa-history"></i> Layar Antrian
+                        <i class="fas fa-tv"></i> <!-- Ikon Layar Antrian -->
+                        Layar Antrian
+                    </a>
+                </li>
+                <!-- Tombol Registrasi -->
+                <li class="nav-item">
+                    <a class="nav-link text-white text-end" href="./register.php">
+                        <i class="fas fa-user-plus"></i> Registrasi
+                    </a>
+                </li>
+
+                <!-- Tombol Logout -->
+                <li class="nav-item">
+                    <a class="nav-link text-white text-end" href="./logout.php">
+                        <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </li>
             </ul>

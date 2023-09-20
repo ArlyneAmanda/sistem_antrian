@@ -98,21 +98,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                 ?>
             </tbody>
         </table>
-
-        <!-- Tombol "Tambah Menu" di bawah tabel -->
-        <div class="text-center mt-3">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Menu</button>
-            <a href="logout.php" class="btn btn-danger ml-3">Log Out</a>
-        </div>
-
+        
         <!-- Tombol Hapus Data dan Tombol Register -->
         <div class="text-center mt-3">
             <button class="btn btn-danger" id="hapusSemuaData">
                 <i class="bi bi-trash"></i> Hapus Semua Data
             </button>
-            <a href="register.php" class="btn btn-success ml-3">
-                Register Akun
-            </a>
         </div>
     </div>
 
