@@ -3,7 +3,7 @@
 session_start();
 
 // Periksa apakah pengguna sudah login sebagai Admin
-if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "Admin") {
+if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "CS") {
     // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
     header("Location: ../login.php");
     exit();
