@@ -1,108 +1,102 @@
 <?php
-
 session_start();
 
-// Periksa apakah pengguna sudah login sebagai Admin
+// Periksa apakah pengguna sudah login sebagai CS
 if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "CS") {
-    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+    // Jika bukan CS, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
     header("Location: ../login.php");
     exit();
 }
 
-// Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
-$username = $_SESSION["username"];
+require '../../koneksi.php';
 
-if (isset($_GET['id'])) { 
-    require '../../koneksi.php';
-
-    // Query SQL untuk mengambil data dari tabel peLoket
-    $query = "SELECT * FROM loket";
+// Fungsi untuk mendapatkan informasi loket berdasarkan ID
+function getLoket($conn, $id, $get){
+    $query = "SELECT * FROM loket where id = $id";
     $result = $conn->query($query);
 
-    function getLoket($conn, $id, $get){
-        $query = "SELECT * FROM loket where id = $id";
-        $result = $conn->query($query);
-
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data = $row[$get];
-            }
-            return $data;
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data = $row[$get];
         }
-        return ''; // Return string kosong jika tidak ada data yang ditemukan
+        return $data;
     }
+    return ''; // Return string kosong jika tidak ada data yang ditemukan
+}
 
-    function getLayanan($conn, $id, $get){
-        $query = "SELECT * FROM layanan where id = $id";
-        $result = $conn->query($query);
+// Fungsi untuk mendapatkan informasi layanan berdasarkan ID
+function getLayanan($conn, $id, $get){
+    $query = "SELECT * FROM layanan where id = $id";
+    $result = $conn->query($query);
 
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data = $row[$get];
-            }
-            return $data;
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data = $row[$get];
         }
-        return ''; // Return string kosong jika tidak ada data yang ditemukan
+        return $data;
     }
+    return ''; // Return string kosong jika tidak ada data yang ditemukan
+}
 
-    function getAntrian($conn, $id){
-        $query = "SELECT min(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called = 0";
+// Fungsi untuk mendapatkan nomor antrian yang belum dipanggil
+function getAntrian($conn, $id){
+    $query = "SELECT min(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called = 0";
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $data = $row['nomor_antrian'];
+    } else {
+        // Jika tidak ada nomor antrian yang belum dipanggil, cek nomor antrian yang sudah dipanggil
+        $query = "SELECT max(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called = 1";
         $result = $conn->query($query);
-
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $data = $row['nomor_antrian'];
+        } else {
+            $data = '';
         }
-        
-        if($data =='') {
-            $query = "SELECT max(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called like 1";
-            $result = $conn->query($query);
-            if ($result && $result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $data = $row['nomor_antrian'] ;
-            }
-        }
-
-        
-        return $data;
     }
 
-    // Tambahkan logika untuk tombol "Selanjutnya" di sini
+    return $data;
+}
+
+// Cek apakah parameter 'id' telah diberikan dalam URL
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
+    
     $id_layanan = getLoket($conn, $id, "id_layanan");
     $nama_loket = getLoket($conn, $id, "nama_loket");
     $nama_layanan = getLayanan($conn, $id_layanan, "nama_layanan");
     $kode_layanan = getLayanan($conn, $id_layanan, "kode_layanan");
     $nomor_antrian = getAntrian($conn, $id_layanan);
     $message = true; // Inisialisasi notifikasi kosong
+} else {
+    // Jika 'id' tidak ada dalam URL, arahkan ke halaman lain atau berikan pesan kesalahan
+    echo "ID Loket tidak ditemukan.";
+    exit();
+}
 
-   // Cek jika tombol "Selanjutnya" ditekan
-    // ...
+// Cek jika tombol "Selanjutnya" ditekan
+if (isset($_POST['btnSelanjutnya'])) {
+    $nomor_antrian = $_POST['btnSelanjutnya'];
 
-    // Tambahkan logika untuk tombol "Selanjutnya" di sini
-    // ...
+    // Update nilai 'called' menjadi 1 untuk nomor antrian saat ini
+    $updateQuery = "UPDATE antrian SET called = 1 WHERE id_layanan = $id_layanan AND nomor_antrian = $nomor_antrian";
+    $conn->query($updateQuery);
 
-    // Tambahkan logika untuk tombol "Selanjutnya" di sini
-        
-    // Cek jika tombol "Selanjutnya" ditekan
-    if (isset($_POST['btnSelanjutnya'])) {
-        $nomor_antrian = $_POST['btnSelanjutnya'];
-    
-        // Update nilai 'called' menjadi 1 untuk nomor antrian saat ini
-        $updateQuery = "UPDATE antrian SET called = 1 WHERE id_layanan = $id_layanan AND nomor_antrian = $nomor_antrian";
-        $conn->query($updateQuery);
+    // Cari nomor antrian selanjutnya yang belum dipanggil
+    $query_next = "SELECT nomor_antrian FROM antrian WHERE id_layanan = $id_layanan AND called = 0 ORDER BY nomor_antrian ASC LIMIT 1";
+    $result_next = $conn->query($query_next);
 
-        // Cari nomor antrian selanjutnya yang belum dipanggil
-        $query_next = "SELECT nomor_antrian FROM antrian WHERE id_layanan = $id_layanan AND called = 0 ORDER BY nomor_antrian ASC LIMIT 1";
-        $result_next = $conn->query($query_next);
-
-        if ($result_next && $result_next->num_rows > 0) {
-            // Ambil nomor antrian selanjutnya
-            $row = $result_next->fetch_assoc();
-            $nomor_antrian = $row['nomor_antrian'];
-        }
+    if ($result_next && $result_next->num_rows > 0) {
+        // Ambil nomor antrian selanjutnya
+        $row = $result_next->fetch_assoc();
+        $nomor_antrian = $row['nomor_antrian'];
     }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -237,4 +231,3 @@ if (isset($_GET['id'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-<?php } ?>
