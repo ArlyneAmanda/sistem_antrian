@@ -100,39 +100,39 @@ $conn->close();
     </style>
 </head>
 <body>
-        <nav class="navbar bg-body-tertiary fixed-top">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item mb-2 fs-5">
-                    <a class="nav-link" aria-current="page" href="halaman_pengunjung.php">Halaman Utama</a>
-                </li>
-                <li class="nav-item dropdown mb-2 fs-5">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    CS
-                    </a>
-                    <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="../CS/index.php">Verifikasi</a></li>
-                    <li><a class="dropdown-item" href="../CS/index.php">Perbaikan Data</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item mb-2 fs-5">
-                    <a class="nav-link" aria-current="page" href="../admin/index.php">Admin</a>
-                </li>
+        <!-- <nav class="navbar bg-body-tertiary fixed-top">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item mb-2 fs-5">
+                        <a class="nav-link" aria-current="page" href="halaman_pengunjung.php">Halaman Utama</a>
+                    </li>
+                    <li class="nav-item dropdown mb-2 fs-5">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        CS
+                        </a>
+                        <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="../CS/index.php">Verifikasi</a></li>
+                        <li><a class="dropdown-item" href="../CS/index.php">Perbaikan Data</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item mb-2 fs-5">
+                        <a class="nav-link" aria-current="page" href="../admin/index.php">Admin</a>
+                    </li>
 
-                </ul>
+                    </ul>
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
-        </nav>
+        </nav> -->
     <div class="container">
         <div class="judul">Selamat Datang di Layanan Kami</div>
         <div class="subjudul">Silakan pilih jenis layanan di bawah ini untuk mendapatkan nomor antrian Anda:</div>
@@ -207,9 +207,6 @@ $conn->close();
             </div>
             <div class="modal-body text-center">
                 <p>Nomor Antrian Anda adalah : <span id="nomorAntrian"></span><br> Nomor Antrian Anda Akan Segera Dicetak</p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Tutup</button>
             </div>
         </div>
     </div>
