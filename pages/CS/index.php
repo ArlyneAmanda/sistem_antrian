@@ -1,5 +1,97 @@
+<?php
+if (isset($_GET['id'])) { 
+    require '../../koneksi.php';
+
+    // Query SQL untuk mengambil data dari tabel peLoket
+    $query = "SELECT * FROM loket";
+    $result = $conn->query($query);
+
+    function getLoket($conn, $id, $get){
+        $query = "SELECT * FROM loket where id = $id";
+        $result = $conn->query($query);
+
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data = $row[$get];
+            }
+            return $data;
+        }
+        return ''; // Return string kosong jika tidak ada data yang ditemukan
+    }
+
+    function getLayanan($conn, $id, $get){
+        $query = "SELECT * FROM layanan where id = $id";
+        $result = $conn->query($query);
+
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data = $row[$get];
+            }
+            return $data;
+        }
+        return ''; // Return string kosong jika tidak ada data yang ditemukan
+    }
+
+    function getAntrian($conn, $id){
+        $query = "SELECT min(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called = 0";
+        $result = $conn->query($query);
+
+        if ($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $data = $row['nomor_antrian'];
+        }
+        
+        if($data =='') {
+            $query = "SELECT max(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called like 1";
+            $result = $conn->query($query);
+            if ($result && $result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $data = $row['nomor_antrian'] ;
+            }
+        }
+
+        
+        return $data;
+    }
+
+    // Tambahkan logika untuk tombol "Selanjutnya" di sini
+    $id = $_GET['id'];
+    $id_layanan = getLoket($conn, $id, "id_layanan");
+    $nama_loket = getLoket($conn, $id, "nama_loket");
+    $nama_layanan = getLayanan($conn, $id_layanan, "nama_layanan");
+    $kode_layanan = getLayanan($conn, $id_layanan, "kode_layanan");
+    $nomor_antrian = getAntrian($conn, $id_layanan);
+    $message = true; // Inisialisasi notifikasi kosong
+
+   // Cek jika tombol "Selanjutnya" ditekan
+    // ...
+
+    // Tambahkan logika untuk tombol "Selanjutnya" di sini
+    // ...
+
+    // Tambahkan logika untuk tombol "Selanjutnya" di sini
+        
+    // Cek jika tombol "Selanjutnya" ditekan
+    if (isset($_POST['btnSelanjutnya'])) {
+        $nomor_antrian = $_POST['btnSelanjutnya'];
+    
+        // Update nilai 'called' menjadi 1 untuk nomor antrian saat ini
+        $updateQuery = "UPDATE antrian SET called = 1 WHERE id_layanan = $id_layanan AND nomor_antrian = $nomor_antrian";
+        $conn->query($updateQuery);
+
+        // Cari nomor antrian selanjutnya yang belum dipanggil
+        $query_next = "SELECT nomor_antrian FROM antrian WHERE id_layanan = $id_layanan AND called = 0 ORDER BY nomor_antrian ASC LIMIT 1";
+        $result_next = $conn->query($query_next);
+
+        if ($result_next && $result_next->num_rows > 0) {
+            // Ambil nomor antrian selanjutnya
+            $row = $result_next->fetch_assoc();
+            $nomor_antrian = $row['nomor_antrian'];
+        }
+    }
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +118,7 @@
             font-size: 18px;
         }
         .navbar-nav .nav-item {
-            margin-right: 20px;
+            margin-right: 20px.
         }
         .navbar-nav .nav-link {
             color: #fff; /* Mengubah warna teks menjadi putih */
@@ -80,6 +172,12 @@
             margin: 0 10px;
             text-transform: uppercase;
         }
+        .notification {
+            color: red;
+            text-align: center;
+            font-weight: bold;
+        }
+        
     </style>
 </head>
 <body>
@@ -91,46 +189,39 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Loket 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Loket 2</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Loket 3</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Loket 4</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Loket 5</a>
-                    </li>
+                    <?php
+                    if ($result && $result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo '<li class="nav-item"><a class="nav-link" href="?id='.$row['id'].'">' . $row['nama_loket'] . '</a></li>';
+                        }
+                    }
+                    ?>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="judul-loket">Pelayanan Loket 1 (Verifikasi)</div>
+        <div class="judul-loket">Pelayanan <?php echo $nama_loket; ?> (<?php echo $nama_layanan; ?>)</div>
         <div class="antrian">
-            <p>Silahkan panggil nomor antrean jika nomor antrean telah tersedia</p>
+            <p>Silahkan panggil nomor antrean jika nomor antrian telah tersedia</p>
         </div>
-        <div>
-            <p class="nomor-antrian">Nomor Antrian: A01</p>
+        <form method="post">
+            <p class="nomor-antrian">Nomor Antrian : <?php echo $kode_layanan; ?> <?php echo $nomor_antrian; ?> </p>
             <div class="text-center">
                 <i class="icon-orang fas fa-user"></i>
             </div>
             <div class="button-container">
-                <button class="btn btn-panggil btn-success">Panggil</button>
-                <button class="btn btn-selanjutnya btn-primary">Selanjutnya</button>
+                <!-- Tombol "Selanjutnya" akan selalu aktif -->
+                <button id="btnSelanjutnya" class="btn btn-selanjutnya btn-primary" name="btnSelanjutnya" value="<?php echo $nomor_antrian ?>">Selanjutnya</button>
             </div>
-        </div>
+        </form>
+       
     </div>
 
     <!-- Include Bootstrap JS and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 </body>
 </html>
+<?php } ?>
