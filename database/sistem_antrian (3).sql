@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Sep 15, 2023 at 07:16 AM
+-- Generation Time: Sep 20, 2023 at 06:56 AM
 -- Server version: 8.0.30
 -- PHP Version: 7.2.9
 
@@ -30,17 +30,27 @@ SET time_zone = "+00:00";
 CREATE TABLE `antrian` (
   `id` int NOT NULL,
   `id_layanan` int NOT NULL,
-  `nomor_antrian` int NOT NULL
+  `nomor_antrian` int NOT NULL,
+  `called` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `antrian`
 --
 
-INSERT INTO `antrian` (`id`, `id_layanan`, `nomor_antrian`) VALUES
-(4, 48, 1),
-(5, 48, 2),
-(6, 46, 1);
+INSERT INTO `antrian` (`id`, `id_layanan`, `nomor_antrian`, `called`) VALUES
+(1, 50, 1, '1'),
+(2, 50, 2, '1'),
+(3, 50, 3, '1'),
+(4, 50, 4, '1'),
+(5, 50, 5, '1'),
+(6, 50, 6, '1'),
+(7, 54, 1, '1'),
+(8, 54, 2, '1'),
+(9, 54, 3, '1'),
+(10, 54, 4, '1'),
+(11, 54, 5, '1'),
+(12, 50, 7, '0');
 
 -- --------------------------------------------------------
 
@@ -59,9 +69,9 @@ CREATE TABLE `layanan` (
 --
 
 INSERT INTO `layanan` (`id`, `nama_layanan`, `kode_layanan`) VALUES
-(46, 'PERBAIKAN', 'A'),
-(47, 'VERIFIKASI', 'B'),
-(48, 'TOILET', 'T');
+(50, 'Catatan Sipil', 'A'),
+(53, 'IKAN BILIS', 'T'),
+(54, 'Bodol', 'B');
 
 -- --------------------------------------------------------
 
@@ -81,9 +91,8 @@ CREATE TABLE `loket` (
 --
 
 INSERT INTO `loket` (`id`, `nama_loket`, `id_layanan`, `petugas`) VALUES
-(3, 'Loket 1', 46, 'Udin'),
-(4, 'Loket 2', 47, 'Bai'),
-(5, 'Loket 1', 48, 'Udin');
+(13, 'Loket 1', 50, '123'),
+(14, 'Loket 2', 54, 'Bai');
 
 -- --------------------------------------------------------
 
@@ -147,19 +156,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `antrian`
 --
 ALTER TABLE `antrian`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `layanan`
 --
 ALTER TABLE `layanan`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `loket`
 --
 ALTER TABLE `loket`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables
