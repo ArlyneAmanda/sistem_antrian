@@ -1,16 +1,11 @@
 <?php
-session_start();
-
-// Periksa apakah pengguna sudah login sebagai CS
-if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "CS") {
-    // Jika bukan CS, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
-    header("Location: ../login.php");
-    exit();
-}
 
 require '../../koneksi.php';
 
-// Fungsi untuk mendapatkan informasi loket berdasarkan ID
+// Query SQL untuk mengambil data dari tabel peLoket
+$query = "SELECT * FROM loket";
+$result = $conn->query($query);
+
 function getLoket($conn, $id, $get){
     $query = "SELECT * FROM loket where id = $id";
     $result = $conn->query($query);
@@ -24,7 +19,6 @@ function getLoket($conn, $id, $get){
     return ''; // Return string kosong jika tidak ada data yang ditemukan
 }
 
-// Fungsi untuk mendapatkan informasi layanan berdasarkan ID
 function getLayanan($conn, $id, $get){
     $query = "SELECT * FROM layanan where id = $id";
     $result = $conn->query($query);
@@ -38,7 +32,6 @@ function getLayanan($conn, $id, $get){
     return ''; // Return string kosong jika tidak ada data yang ditemukan
 }
 
-// Fungsi untuk mendapatkan nomor antrian yang belum dipanggil
 function getAntrian($conn, $id){
     $query = "SELECT min(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called = 0";
     $result = $conn->query($query);
@@ -46,36 +39,29 @@ function getAntrian($conn, $id){
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $data = $row['nomor_antrian'];
-    } else {
-        // Jika tidak ada nomor antrian yang belum dipanggil, cek nomor antrian yang sudah dipanggil
-        $query = "SELECT max(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called = 1";
+    }
+    
+    if($data =='') {
+        $query = "SELECT max(nomor_antrian) as nomor_antrian FROM antrian where id_layanan = $id AND called like 1";
         $result = $conn->query($query);
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $data = $row['nomor_antrian'];
-        } else {
-            $data = '';
+            $data = $row['nomor_antrian'] ;
         }
     }
 
+    
     return $data;
 }
 
-// Cek apakah parameter 'id' telah diberikan dalam URL
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    
-    $id_layanan = getLoket($conn, $id, "id_layanan");
-    $nama_loket = getLoket($conn, $id, "nama_loket");
-    $nama_layanan = getLayanan($conn, $id_layanan, "nama_layanan");
-    $kode_layanan = getLayanan($conn, $id_layanan, "kode_layanan");
-    $nomor_antrian = getAntrian($conn, $id_layanan);
-    $message = true; // Inisialisasi notifikasi kosong
-} else {
-    // Jika 'id' tidak ada dalam URL, arahkan ke halaman lain atau berikan pesan kesalahan
-    echo "ID Loket tidak ditemukan.";
-    exit();
-}
+// Tambahkan logika untuk tombol "Selanjutnya" di sini
+$id = isset($_GET['id']) ? $_GET['id'] : null;
+$id_layanan = $id ? getLoket($conn, $id, "id_layanan") : null;
+$nama_loket = $id ? getLoket($conn, $id, "nama_loket") : '';
+$nama_layanan = $id_layanan ? getLayanan($conn, $id_layanan, "nama_layanan") : '';
+$kode_layanan = $id_layanan ? getLayanan($conn, $id_layanan, "kode_layanan") : '';
+$nomor_antrian = $id_layanan ? getAntrian($conn, $id_layanan) : '';
+$message = true; // Inisialisasi notifikasi kosong
 
 // Cek jika tombol "Selanjutnya" ditekan
 if (isset($_POST['btnSelanjutnya'])) {
@@ -209,6 +195,7 @@ if (isset($_POST['btnSelanjutnya'])) {
     </nav>
 
     <div class="container">
+        <?php if ($id): ?>
         <div class="judul-loket">Pelayanan <?php echo $nama_loket; ?> (<?php echo $nama_layanan; ?>)</div>
         <div class="antrian">
             <p>Silahkan panggil nomor antrean jika nomor antrian telah tersedia</p>
@@ -223,7 +210,7 @@ if (isset($_POST['btnSelanjutnya'])) {
                 <button id="btnSelanjutnya" class="btn btn-selanjutnya btn-primary" name="btnSelanjutnya" value="<?php echo $nomor_antrian ?>">Selanjutnya</button>
             </div>
         </form>
-       
+        <?php endif; ?>
     </div>
 
     <!-- Include Bootstrap JS and jQuery -->
@@ -231,3 +218,4 @@ if (isset($_POST['btnSelanjutnya'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
