@@ -48,14 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
 
     <!-- Link ke CSS DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <style>
-        .img1{
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            width: 300px;
-        }
-    </style>
+    <!-- Link ke library Swal -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 </head>
 <body>
 <?php include '../../includes/navbar.php'; ?>
@@ -159,8 +154,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
         </div>
     </div>
 
-    <img src="../../images/adminpics.webp" alt="" class="img1">
-
     <!-- Tambahkan script Bootstrap, jQuery, dan DataTables di sini -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -178,7 +171,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                 var namaMenu = $("#namaMenu").val();
                 $.ajax({
                     type: "POST",
-                    url: "index.php", // Ganti dengan path ke script PHP yang akan menambahkan data
+                    url: "layanan.php", // Ganti dengan path ke script PHP yang akan menambahkan data
                     data: {
                         kodeLayanan: kodeLayanan,
                         namaMenu: namaMenu
@@ -203,31 +196,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                 });
             });
 
-            // Event handler untuk tombol "Hapus"
-            $(".hapus-data").click(function() {
-                var idData = $(this).data("id");
-                if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-                    $.ajax({
-                        type: "POST",
-                        url: "hapus_menu.php", // Ganti dengan path ke script PHP yang akan menghapus data
-                        data: {
-                            id: idData
-                        },
-                        success: function(response) {
-                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
-                            console.log(response);
-                            // Refresh halaman setelah 3 detik
-                            setTimeout(function() {
-                                location.reload();
-                            }, 500); // Refresh setelah 3 detik (500 milidetik)
-                        },
-                        error: function(xhr, textStatus, errorThrown) {
-                            console.error(xhr.responseText);
-                            // Tambahkan kode di sini untuk menangani kesalahan
-                        }
-                    });
+$(".hapus-data").click(function() {
+    var idData = $(this).data("id");
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Apakah Anda yakin ingin menghapus data ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "POST",
+                url: "hapus_menu.php", // Ganti dengan path ke script PHP yang akan menghapus data
+                data: {
+                    id: idData
+                },
+                success: function(response) {
+                    // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                    console.log(response);
+                    // Tampilkan notifikasi data berhasil dihapus
+                    Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+                    // Refresh halaman setelah 1 detik
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000); // Refresh setelah 1 detik (1000 milidetik)
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error(xhr.responseText);
+                    // Tambahkan kode di sini untuk menangani kesalahan
                 }
             });
+        }
+    });
+});
+
 
             // Event handler untuk tombol "Hapus Semua Data"
             $("#hapusSemuaData").click(function() {

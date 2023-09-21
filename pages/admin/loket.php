@@ -99,10 +99,12 @@ $conn->close();
     <!-- Tambahkan ini di dalam bagian head -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* .card.bg-success {
-            background-color: #20c997;
-        } */
-    </style>
+    .toast-success {
+        background-color: #20c997 !important;
+        color: white !important;
+    }
+</style>
+
 </head>
 <body>
 <?php include '../../includes/navbar.php'; ?>
@@ -264,9 +266,6 @@ $("#tambahkanMenu").click(function() {
                 location.reload();
             }, 500); // Refresh setelah 1 detik (1000 milidetik)
         },
-
-        // ...
-
         error: function(xhr, textStatus, errorThrown) {
             console.error(xhr.responseText);
             // Tambahkan kode di sini untuk menangani kesalahan
