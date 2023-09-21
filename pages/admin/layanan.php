@@ -98,6 +98,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                 ?>
             </tbody>
         </table>
+        <div class="text-center mt-3">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Menu</button>
+        </div>
         
         <!-- Tombol Hapus Data dan Tombol Register -->
         <div class="text-center mt-3">
