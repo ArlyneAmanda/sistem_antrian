@@ -109,7 +109,7 @@
 
                 <!-- Tombol Logout -->
                 <li class="nav-item">
-                    <a class="nav-link text-white text-end" href="./logout.php">
+                    <a class="nav-link text-white text-end" href="../logout.php">
                         <i class="fas fa-sign-out-alt"></i> Logout
                     </a>
                 </li>

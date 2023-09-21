@@ -178,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                 var namaMenu = $("#namaMenu").val();
                 $.ajax({
                     type: "POST",
-                    url: "index.php", // Ganti dengan path ke script PHP yang akan menambahkan data
+                    url: "layanan.php", // Ganti dengan path ke script PHP yang akan menambahkan data
                     data: {
                         kodeLayanan: kodeLayanan,
                         namaMenu: namaMenu
