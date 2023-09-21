@@ -2,6 +2,18 @@
 
 require '../../koneksi.php';
 
+session_start();
+
+// Periksa apakah pengguna sudah login sebagai Admin
+if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "CS") {
+    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+    header("Location: ../login.php");
+    exit();
+}
+
+// Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
+$username = $_SESSION["username"];
+
 // Query SQL untuk mengambil data dari tabel peLoket
 $query = "SELECT * FROM loket";
 $result = $conn->query($query);
@@ -189,7 +201,13 @@ if (isset($_POST['btnSelanjutnya'])) {
                         }
                     }
                     ?>
+                <li class="nav-item">
+                    <a class="nav-link text-white text-end" href="../logout.php">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </li>
                 </ul>
+                <!-- Tombol Logout -->
             </div>
         </div>
     </nav>
