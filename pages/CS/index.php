@@ -1,4 +1,5 @@
 <?php
+
 require '../../koneksi.php';
 
 // Query SQL untuk mengambil data dari tabel peLoket
@@ -217,3 +218,4 @@ if (isset($_POST['btnSelanjutnya'])) {
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
