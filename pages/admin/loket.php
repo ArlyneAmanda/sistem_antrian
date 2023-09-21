@@ -149,6 +149,9 @@ $conn->close();
                 ?>
             </tbody>
         </table>
+        <div class="text-center mt-3">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Loket</button>
+        </div>
 
         <!-- Tombol Hapus Data dan Tombol Register -->
         <div class="text-center mt-3">
