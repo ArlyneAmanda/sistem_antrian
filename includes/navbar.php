@@ -51,13 +51,18 @@
                     <a class="nav-link text-white" href="../pengunjung/index.php">
                         <i class="fas fa-calendar-check"></i> Ambil Antrean
                     </a>
+                </li> 
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="../CS/index.php">
+                        <i class="fas fa-user-shield"></i> CS
+                    </a>
                 </li>   
-                <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-user-shield"></i> <!-- Ikon CS -->
+                <!-- <li class="nav-item dropdown">
+                <a class="nav-link text-white" href="../pages/CS/index.php" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-shield"></i> 
                     CS
-                </a>
-                    <ul class="dropdown-menu">
+                </a> -->
+                    <!-- <ul class="dropdown-menu">
                     <li class="dropdown-submenu">
                         <a class="dropdown-item" href="#"> Verifikasi<span
                             class="float-end custom-toggle-arrow">&#187</span></a>
@@ -77,7 +82,7 @@
                         <li><a class="dropdown-item" href="#">Loket 2</a></li>
                         </ul>
                     </li>
-                    </ul>
+                    </ul> -->
                 </li>
                 <!-- Menu Loket dengan ikon -->
                 <li class="nav-item">
