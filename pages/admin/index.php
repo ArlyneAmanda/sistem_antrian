@@ -2,15 +2,26 @@
 
 session_start();
 
-// Periksa apakah pengguna sudah login sebagai Admin
-if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "Admin") {
-    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION["username"])) {
+    // Jika belum login, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
     header("Location: ../login.php");
     exit();
 }
 
 // Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
 $username = $_SESSION["username"];
+$role = $_SESSION["role"];
+
+// Pengecekan peran untuk mengakses halaman CS
+if ($role === "Admin" || $role === "CS") {
+    // Pengguna yang memiliki peran "Admin" atau "CS" diizinkan mengakses halaman CS
+    // Isi halaman CS di sini
+} else {
+    // Jika bukan "Admin" atau "CS," arahkan ke halaman lain atau tampilkan pesan akses ditolak
+    header("Location: ../login.php"); // Atau arahkan ke halaman lain
+    exit();
+}
 
 ?>
 <!DOCTYPE html>
