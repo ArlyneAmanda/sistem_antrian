@@ -1,5 +1,28 @@
 <?php
 
+session_start();
+
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION["username"])) {
+    // Jika belum login, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+    header("Location: ../login.php");
+    exit();
+}
+
+// Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
+$username = $_SESSION["username"];
+$role = $_SESSION["role"];
+
+// Pengecekan peran untuk mengakses halaman CS
+if ($role === "Admin" || $role === "CS") {
+    // Pengguna yang memiliki peran "Admin" atau "CS" diizinkan mengakses halaman CS
+    // Isi halaman CS di sini
+} else {
+    // Jika bukan "Admin" atau "CS," arahkan ke halaman lain atau tampilkan pesan akses ditolak
+    header("Location: ../login.php"); // Atau arahkan ke halaman lain
+    exit();
+} 
+
 require '../../koneksi.php';
 
 // Query SQL untuk mengambil data dari tabel peLoket
@@ -215,7 +238,11 @@ if (isset($_POST['btnSelanjutnya'])) {
                     }
                     ?>
                 </ul>
+                <!-- Tombol Logout -->
             </div>
+            <a class="nav-link text-white text-end" href="../logout.php">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         </div>
     </nav>
 
