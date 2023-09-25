@@ -1,3 +1,7 @@
+<?php
+require '../../koneksi.php'; // Sesuaikan dengan nama file koneksi Anda
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,57 +135,56 @@
     </div>
 
     <div class="container mt-3">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="small-box">
-                    <!-- Isi Konten Sama Dengan Container Antrian -->
-                    <h2>Nomor Antrian</h2>
-                    <hr>
-                    <h1 class="display-1 font-weight-bold">222</h1>
-                    <hr>
-                    <h3 style="display:inline;">-</h3>
-                    <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i> Loket C</h3>
-                    <h3 style="display:inline;" class="font-weight-bold">-</h3>
+    <div class="row">
+        <?php
+        // Query untuk mengambil data loket
+        $loketQuery = "SELECT * FROM loket";
+        $loketResult = $conn->query($loketQuery);
+
+        if ($loketResult->num_rows > 0) {
+            while ($loketRow = $loketResult->fetch_assoc()) {
+                $namaLoket = $loketRow['nama_loket'];
+
+                // Query untuk mengambil data antrian yang sudah dipanggil berdasarkan loket
+                $antrianQuery = "SELECT MAX(nomor_antrian) AS nomor_antrian_tertinggi
+                                FROM antrian
+                                INNER JOIN loket ON antrian.id_layanan = loket.id_layanan
+                                WHERE antrian.called = '1' AND loket.nama_loket = '$namaLoket'";
+
+                $antrianResult = $conn->query($antrianQuery);
+
+                if ($antrianResult->num_rows > 0) {
+                    $antrianRow = $antrianResult->fetch_assoc();
+                    $nomorAntrian = $antrianRow['nomor_antrian_tertinggi'];
+                } else {
+                    $nomorAntrian = '-';
+                }
+        ?>
+                <div class="col-md-3">
+                    <div class="small-box"> 
+                        <h2>Nomor Antrian</h2>
+                        <hr>
+                        <h1 class="display-1 font-weight-bold"><?php echo $nomorAntrian; ?></h1>
+                        <hr>
+                        <h3 style="display:inline;">- </h3>
+                        <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i> <?php echo $namaLoket; ?></h3>
+                        <h3 style="display:inline;" class="font-weight-bold">-</h3>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="small-box">
-                    <!-- Isi Konten Sama Dengan Container Antrian -->
-                    <h2>Nomor Antrian</h2>
-                    <hr>
-                    <h1 class="display-1 font-weight-bold">204</h1>
-                    <hr>
-                    <h3 style="display:inline;">-</h3>
-                    <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i> Loket A</h3>
-                    <h3 style="display:inline;" class="font-weight-bold">-</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="small-box">
-                    <!-- Isi Konten Sama Dengan Container Antrian -->
-                    <h2>Nomor Antrian</h2>
-                    <hr>
-                    <h1 class="display-1 font-weight-bold">235</h1>
-                    <hr>
-                    <h3 style="display:inline;">-</h3>
-                    <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i> Loket B</h3>
-                    <h3 style="display:inline;" class="font-weight-bold">-</h3>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="small-box">
-                    <!-- Isi Konten Sama Dengan Container Antrian -->
-                    <h2>Nomor Antrian</h2>
-                    <hr>
-                    <h1 class="display-1 font-weight-bold">269</h1>
-                    <hr>
-                    <h3 style="display:inline;">-</h3>
-                    <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i> Loket A</h3>
-                    <h3 style="display:inline;" class="font-weight-bold">-</h3>
-                </div>
-            </div>
-        </div>
+        <?php
+            }
+        } else {
+            // Tampilkan pesan jika tidak ada loket yang ditemukan
+            echo '<p>Tidak ada loket yang ditemukan.</p>';
+        }
+        ?>
     </div>
+</div>
+
+
+
+
+   
     <!-- Running text -->
     <div class="running-text-container">
         <span class="running-text">bodol bodol bodol bodol</span>
