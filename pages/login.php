@@ -2,6 +2,33 @@
 session_start();
 require '../koneksi.php';
 
+// Periksa apakah pengguna sudah login
+if (isset($_SESSION["username"])) {
+    // Pengguna sudah login, arahkan ke halaman yang sesuai berdasarkan peran (role)
+    if ($_SESSION["role"] === "Admin") {
+        header("Location: admin/index.php");
+        exit();
+    } elseif ($_SESSION["role"] === "CS") {
+        // Selain "Admin," arahkan ke halaman CS dengan ID loket yang sesuai
+        $loket = $_SESSION["loket"];
+        $query = "SELECT id FROM loket WHERE nama_loket = '$loket'";
+        $result = mysqli_query($conn, $query);
+
+        if ($result && mysqli_num_rows($result) == 1) {
+            $row = mysqli_fetch_assoc($result);
+            $loket_id = $row['id'];
+
+            // Arahkan pengguna ke halaman CS dengan ID loket yang sesuai
+            header("Location: CS/index.php?id=$loket_id");
+            exit();
+        } else {
+            // Loket tidak ditemukan dalam database
+            $error_message = "Error: Loket tidak ditemukan.";
+        }
+    }
+    // Tambahkan kondisi lain jika perlu
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Ambil data dari formulir login
     $username = $_POST["username"];
@@ -17,16 +44,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $row["password"])) {
             $_SESSION["username"] = $row["username"];
             $_SESSION["role"] = $row["role"];
+            $_SESSION["loket"] = $row["loket"]; // Simpan loket dalam session
 
             // Arahkan ke halaman yang sesuai berdasarkan peran (role)
-            if ($_SESSION["role"] == "Admin") {
-                header("Location: ../pages/admin/index.php");
-            } elseif ($_SESSION["role"] == "CS") {
-                header("Location: CS/index.php");
+            if ($_SESSION["role"] === "Admin") {
+                header("Location: admin/index.php");
+                exit();
+            } elseif ($_SESSION["role"] === "CS") {
+                // Selain "Admin," arahkan ke halaman CS dengan ID loket yang sesuai
+                $loket = $_SESSION["loket"];
+                $query = "SELECT id FROM loket WHERE nama_loket = '$loket'";
+                $result = mysqli_query($conn, $query);
+
+                if ($result && mysqli_num_rows($result) == 1) {
+                    $row = mysqli_fetch_assoc($result);
+                    $loket_id = $row['id'];
+
+                    // Arahkan pengguna ke halaman CS dengan ID loket yang sesuai
+                    header("Location: CS/index.php?id=$loket_id");
+                    exit();
+                } else {
+                    // Loket tidak ditemukan dalam database
+                    $error_message = "Error: Loket tidak ditemukan.";
+                }
             }
             // Tambahkan kondisi lain jika perlu
-
-            exit();
         } else {
             // Jika password tidak cocok, tampilkan pesan kesalahan
             $login_error = "Password salah.";
@@ -40,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
+
 
 
 <!DOCTYPE html>

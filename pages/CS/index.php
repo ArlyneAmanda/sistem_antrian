@@ -4,15 +4,27 @@ require '../../koneksi.php';
 
 session_start();
 
-// Periksa apakah pengguna sudah login sebagai Admin
-if (!isset($_SESSION["username"]) || $_SESSION["role"] !== "CS") {
-    // Jika bukan Admin, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION["username"])) {
+    // Jika belum login, arahkan ke halaman login atau halaman lain sesuai kebijakan Anda
     header("Location: ../login.php");
     exit();
 }
 
 // Selanjutnya, Anda dapat menggunakan session untuk mendapatkan informasi pengguna, misalnya:
 $username = $_SESSION["username"];
+$role = $_SESSION["role"];
+
+// Pengecekan peran untuk mengakses halaman CS
+if ($role === "Admin" || $role === "CS") {
+    // Pengguna yang memiliki peran "Admin" atau "CS" diizinkan mengakses halaman CS
+    // Isi halaman CS di sini
+} else {
+    // Jika bukan "Admin" atau "CS," arahkan ke halaman lain atau tampilkan pesan akses ditolak
+    header("Location: ../login.php"); // Atau arahkan ke halaman lain
+    exit();
+}
+
 
 // Query SQL untuk mengambil data dari tabel peLoket
 $query = "SELECT * FROM loket";
@@ -182,6 +194,31 @@ if (isset($_POST['btnSelanjutnya'])) {
             text-align: center;
             font-weight: bold;
         }
+        .con-index {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-top: 15%;
+        }
+        .judul {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .subjudul {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .img1{
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 300px;
+        }
         
     </style>
 </head>
@@ -212,6 +249,11 @@ if (isset($_POST['btnSelanjutnya'])) {
         </div>
     </nav>
 
+    <!-- <div class="con-index">
+        <div class="judul">Selamat Datang di Halaman Admin</div>
+        <div class="subjudul">Silakan pilih menu yang ada pada navbar untuk memanage fitur yang tersedia.</div>  
+    </div> -->
+
     <div class="container">
         <?php if ($id): ?>
         <div class="judul-loket">Pelayanan <?php echo $nama_loket; ?> (<?php echo $nama_layanan; ?>)</div>
@@ -228,7 +270,12 @@ if (isset($_POST['btnSelanjutnya'])) {
                 <button id="btnSelanjutnya" class="btn btn-selanjutnya btn-primary" name="btnSelanjutnya" value="<?php echo $nomor_antrian ?>">Selanjutnya</button>
             </div>
         </form>
-        <?php endif; ?>
+        <?php else: ?>
+    <!-- Tampilkan sambutan di sini -->
+    <div class="con-index">
+        <div class="judul">Selamat Datang di Halaman CS</div>
+        <div class="subjudul">Silakan pilih menu Loket pada navbar untuk mengakses fitur halaman CS.</div>
+    <?php endif; ?>
     </div>
 
     <!-- Include Bootstrap JS and jQuery -->

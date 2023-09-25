@@ -71,6 +71,8 @@ $result = $conn->query($query);
 $query = "SELECT loket.petugas, layanan.nama_layanan, loket.nama_loket, loket.id FROM loket
 INNER JOIN layanan ON loket.id_layanan = layanan.id";
 
+
+
 $queryLayanan = "SELECT nama_layanan FROM layanan";
 $resultLayanan = $conn->query($queryLayanan);
 

@@ -49,9 +49,10 @@
                 </li> -->
                 <li class="nav-item">
                     <a class="nav-link text-white" href="../pengunjung/index.php">
-                        <i class="fas fa-calendar-check"></i> Ambil Antrean
+                        <i class="fas fa-ticket"></i> 
+                        Ambil Antrean
                     </a>
-                </li> 
+                </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="../CS/index.php">
                         <i class="fas fa-user-shield"></i> CS
