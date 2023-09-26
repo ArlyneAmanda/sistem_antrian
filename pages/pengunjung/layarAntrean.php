@@ -103,16 +103,49 @@ require '../../koneksi.php'; // Sesuaikan dengan nama file koneksi Anda
     <div class="container mt-3">
         <div class="row">
             <div class="col-md-5">
+        <?php
+        // ID Loket yang ingin Anda tampilkan
+        $loketIdToDisplay = 33; // Ganti dengan ID Loket yang sesuai
+
+        // Query untuk mengambil data loket berdasarkan ID
+        $loketQuery = "SELECT * FROM loket WHERE id = $loketIdToDisplay";
+        $loketResult = $conn->query($loketQuery);
+
+        if ($loketResult->num_rows > 0) {
+            $loketRow = $loketResult->fetch_assoc();
+            $namaLoket = $loketRow['nama_loket'];
+
+            // Query untuk mengambil data antrian yang sudah dipanggil berdasarkan loket
+            $antrianQuery = "SELECT MAX(nomor_antrian) AS nomor_antrian_tertinggi
+                            FROM antrian
+                            INNER JOIN loket ON antrian.id_layanan = loket.id_layanan
+                            WHERE antrian.called = '1' AND loket.nama_loket = '$namaLoket'";
+
+            $antrianResult = $conn->query($antrianQuery);
+
+            if ($antrianResult->num_rows > 0) {
+                $antrianRow = $antrianResult->fetch_assoc();
+                $nomorAntrian = $antrianRow['nomor_antrian_tertinggi'];
+            } else {
+                $nomorAntrian = '-';
+            }
+        ?>
                 <div class="alert alert-block alert-info" style="height: 96%; background-color: #20c997!important; border-color: #20c997!important; color: #fff!important;">
-                    <br>
-                    <br>
-                    <h2>Nomor Antrian</h2>
-                    <hr>
-                    <h1 class="display-1 font-weight-bold" id="nomor_antrian">265</h1>
-                    <hr>
-                    <h3 id="keterangan" style="display:inline;">-</h3>
-                    <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i> Loket B</h3>
-                    <h3 id="nomor_loket" style="display:inline;" class="font-weight-bold">-</h3>
+                <br>
+                <br>
+                <h2>Nomor Antrian</h2>
+                <hr>
+                <h1 class="display-1 font-weight-bold" id="nomor_antrian"><?php echo $nomorAntrian; ?></h1>
+                <hr>
+                <h3 id="keterangan" style="display:inline;">-</h3>
+                <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i><?php echo $namaLoket; ?></h3>
+                <h3 id="nomor_loket" style="display:inline;" class="font-weight-bold">-</h3>
+                    <?php
+        } else {
+            // Tampilkan pesan jika loket dengan ID yang ditentukan tidak ditemukan
+            echo '<p>Loket tidak ditemukan.</p>';
+        }
+        ?>
                 </div>
             </div>
     
