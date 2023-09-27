@@ -48,14 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
 
     <!-- Link ke CSS DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <style>
-        .img1{
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            width: 300px;
-        }
-    </style>
+    
 </head>
 <body>
 <?php include '../../includes/navbar.php'; ?>
@@ -158,8 +151,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
             </div>
         </div>
     </div>
-
-    <img src="../../images/adminpics.webp" alt="" class="img1">
 
     <!-- Tambahkan script Bootstrap, jQuery, dan DataTables di sini -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

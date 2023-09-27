@@ -63,6 +63,7 @@ if ($role === "Admin" || $role === "CS") {
 <div class="container">
         <div class="judul">Selamat Datang di Halaman Admin</div>
         <div class="subjudul">Silakan pilih menu yang ada pada navbar untuk memanage fitur yang tersedia.</div>  
-    </div>
+</div>
+<img src="../../images/adminpics.webp" alt="" class="img1">
 </body>
 </html>
