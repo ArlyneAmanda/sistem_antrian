@@ -1,13 +1,14 @@
 <?php
-require '../../koneksi.php'; // Sesuaikan dengan nama file koneksi Anda
+require '../../koneksi.php';
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Layar Antrian</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -98,74 +99,32 @@ require '../../koneksi.php'; // Sesuaikan dengan nama file koneksi Anda
         }
     }
 
+    .card-body {
+        text-align: center; /* Untuk mengatur posisi horizontal ke tengah halaman */
+        display: flex; /* Menggunakan tata letak flex */
+        justify-content: center; /* Untuk mengatur posisi vertikal ke tengah halaman */
+        align-items: center; /* Untuk mengatur posisi vertikal ke tengah halaman */
+    }
+
 </style>
 <body>
-    <div class="container mt-3">
-        <div class="row">
-            <div class="col-md-5">
-        <?php
-        // ID Loket yang ingin Anda tampilkan
-        $loketIdToDisplay = 33; // Ganti dengan ID Loket yang sesuai
-
-        // Query untuk mengambil data loket berdasarkan ID
-        $loketQuery = "SELECT * FROM loket WHERE id = $loketIdToDisplay";
-        $loketResult = $conn->query($loketQuery);
-
-        if ($loketResult->num_rows > 0) {
-            $loketRow = $loketResult->fetch_assoc();
-            $namaLoket = $loketRow['nama_loket'];
-
-            // Query untuk mengambil data antrian yang sudah dipanggil berdasarkan loket
-            $antrianQuery = "SELECT MAX(nomor_antrian) AS nomor_antrian_tertinggi
-                            FROM antrian
-                            INNER JOIN loket ON antrian.id_layanan = loket.id_layanan
-                            WHERE antrian.called = '1' AND loket.nama_loket = '$namaLoket'";
-
-            $antrianResult = $conn->query($antrianQuery);
-
-            if ($antrianResult->num_rows > 0) {
-                $antrianRow = $antrianResult->fetch_assoc();
-                $nomorAntrian = $antrianRow['nomor_antrian_tertinggi'];
-            } else {
-                $nomorAntrian = '-';
-            }
-        ?>
-                <div class="alert alert-block alert-info" style="height: 96%; background-color: #20c997!important; border-color: #20c997!important; color: #fff!important;">
-                <br>
-                <br>
-                <h2>Nomor Antrian</h2>
-                <hr>
-                <h1 class="display-1 font-weight-bold" id="nomor_antrian"><?php echo $nomorAntrian; ?></h1>
-                <hr>
-                <h3 id="keterangan" style="display:inline;">-</h3>
-                <h3 style="display:inline;" class="font-weight-bold"><i class="icon fas fa-arrow-circle-right"> </i><?php echo $namaLoket; ?></h3>
-                <h3 id="nomor_loket" style="display:inline;" class="font-weight-bold">-</h3>
-                    <?php
-        } else {
-            // Tampilkan pesan jika loket dengan ID yang ditentukan tidak ditemukan
-            echo '<p>Loket tidak ditemukan.</p>';
-        }
-        ?>
+ 
+    <!-- /.col -->
+            <div class="card-body">
+                <!-- Centered image -->
+                <div class="clock">
+                    <span id="tanggal"></span>
+                    <span id="waktu"></span><a>:</a>
+                    <span id="detik"></span>
                 </div>
+                <iframe width="45%" height="350" src="https://tv.detik.com/trans7/embed?smartautoplay=true" frameborder="0" allowfullscreen></iframe>
+
             </div>
-    
-            <!-- /.col -->
-            <div class="col-md-7">
-                <div class="card card-default">
-                    <div class="card-body">
-                        <div class="clock">
-                            <span id="tanggal"></span>
-                            <span id="waktu"></span><a>:</a>
-                            <span id="detik"></span>
-                        </div>
-                        <img width="100%" height="320" src="https://ilhamrizqi.com/wp-content/uploads/2014/08/computer-programming.jpg" alt="Gambar Programming">
-                    </div>
-                </div>
-            </div>
-            <!-- /.col -->
-        </div>
-        <!-- /.row -->
-    </div>
+
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+</div>
 
     <div class="container mt-3">
     <div class="row">
@@ -220,7 +179,7 @@ require '../../koneksi.php'; // Sesuaikan dengan nama file koneksi Anda
    
     <!-- Running text -->
     <div class="running-text-container">
-        <span class="running-text">bodol bodol bodol bodol</span>
+        <span class="running-text">Selamat datang di Layanan Antrian Online kami!  || Mohon bersabar, layanan sedang berlangsung || Ingat, jaga jarak sosial dan gunakan masker </span>
     </div>
     <!-- Include Bootstrap JS if needed -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
