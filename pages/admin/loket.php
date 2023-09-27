@@ -101,9 +101,9 @@ $conn->close();
     <!-- Tambahkan ini di dalam bagian head -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* .card.bg-success {
+        .card.bg-success {
             background-color: #20c997;
-        } */
+        }
     </style>
 </head>
 <body>
