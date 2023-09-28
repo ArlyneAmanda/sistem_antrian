@@ -94,13 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
         <div class="text-center mt-3">
             <button class="btn btn-primary" data-toggle="modal" data-target="#tambahMenuModal">Tambah Menu</button>
         </div>
-        
-        <!-- Tombol Hapus Data dan Tombol Register -->
-        <div class="text-center mt-3">
-            <button class="btn btn-danger" id="hapusSemuaData">
-                <i class="bi bi-trash"></i> Hapus Semua Data
-            </button>
-        </div>
     </div>
 
     <!-- Modal Tambah Menu -->
@@ -151,6 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
             </div>
         </div>
     </div>
+    <?php include '../../includes/footer.php'; ?>
 
     <!-- Tambahkan script Bootstrap, jQuery, dan DataTables di sini -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -204,28 +198,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                         data: {
                             id: idData
                         },
-                        success: function(response) {
-                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
-                            console.log(response);
-                            // Refresh halaman setelah 3 detik
-                            setTimeout(function() {
-                                location.reload();
-                            }, 500); // Refresh setelah 3 detik (500 milidetik)
-                        },
-                        error: function(xhr, textStatus, errorThrown) {
-                            console.error(xhr.responseText);
-                            // Tambahkan kode di sini untuk menangani kesalahan
-                        }
-                    });
-                }
-            });
-
-            // Event handler untuk tombol "Hapus Semua Data"
-            $("#hapusSemuaData").click(function() {
-                if (confirm("Apakah Anda yakin ingin menghapus semua data?")) {
-                    $.ajax({
-                        type: "POST",
-                        url: "hapus_semua_data.php", // Ganti dengan path ke script PHP yang akan menghapus semua data
                         success: function(response) {
                             // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
                             console.log(response);
