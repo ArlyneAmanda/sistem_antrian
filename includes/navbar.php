@@ -85,18 +85,18 @@
                     </li>
                     </ul> -->
                 </li>
-                <!-- Menu Loket dengan ikon -->
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="../admin/loket.php">
-                        <i class="fas fa-door-open"></i> <!-- Ikon Loket -->
-                        Loket
-                    </a>
-                </li>
                 <!-- Menu Pelayanan dengan ikon -->
                 <li class="nav-item">
                     <a class="nav-link text-white" href="../admin/layanan.php">
                         <i class="fas fa-cogs"></i> <!-- Ikon Pelayanan -->
                         Pelayanan
+                    </a>
+                </li>
+                <!-- Menu Loket dengan ikon -->
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="../admin/loket.php">
+                        <i class="fas fa-door-open"></i> <!-- Ikon Loket -->
+                        Loket
                     </a>
                 </li>
                 <!-- Menu Layar Antrian dengan ikon -->

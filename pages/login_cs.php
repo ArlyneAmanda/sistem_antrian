@@ -17,17 +17,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $row["password"])) {
             $_SESSION["username"] = $row["username"];
             $_SESSION["role"] = $row["role"];
+            $_SESSION["loket"] = $row["loket"]; // Simpan loket dalam session
 
             // Arahkan ke halaman yang sesuai berdasarkan peran (role)
-            if ($_SESSION["role"] === "Admin") {
-                header("Location: admin/index.php");
-                exit();
-            } else if ($_SESSION["role"] === "CS") {
-                // Jika peran adalah CS, tampilkan pemberitahuan bahwa ini adalah akun CS
-                $login_error = "Anda login sebagai CS. Silakan akses halaman CS.";
+            if ($_SESSION["role"] === "CS") {
+                $selectedLoket = $_POST['loket']; // Ambil loket yang dipilih oleh pengguna
+                
+                if (!empty($selectedLoket)) {
+                    // Arahkan pengguna ke halaman CS dengan loket yang sesuai
+                    $query = "SELECT id FROM loket WHERE nama_loket = '$selectedLoket'";
+                    $result = mysqli_query($conn, $query);
+            
+                    if ($result && mysqli_num_rows($result) == 1) {
+                        $row = mysqli_fetch_assoc($result);
+                        $id = $row['id'];
+            
+                        // Arahkan pengguna ke halaman CS dengan loket_id yang sesuai
+                        header("Location: ../pages/CS/index.php?id=$id");
+                        exit();
+                    } else {
+                        // Loket tidak ditemukan dalam database
+                        $login_error = "Error: Loket tidak ditemukan.";
+                    }
+                } else {
+                    // Tampilkan pemberitahuan jika loket tidak dipilih
+                    $login_error = "Pilih loket untuk melanjutkan.";
+                }
+            } elseif ($_SESSION["role"] === "Admin") {
+                // Tampilkan pemberitahuan jika login sebagai Admin
+                $login_error = "Anda adalah seorang Admin. Silakan login melalui halaman admin.";
             } else {
-                // Pemberitahuan lain jika peran tidak diketahui
-                $login_error = "Anda memiliki peran yang tidak valid.";
+                // Tambahkan kondisi lain jika perlu
             }
         } else {
             // Jika password tidak cocok, tampilkan pesan kesalahan
@@ -42,8 +62,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -94,11 +112,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
             </div>
+            <div class="form-group" >
+            <label for="loket">Loket</label>
+                <select class="form-control" id="loket" name="loket" required>
+                    <option value="" selected disabled>Pilih Loket</option>
+                    <?php
+                    include '../koneksi.php';
+                            //query menampilkan nama unit kerja ke dalam combobox
+                        $b	= mysqli_query($conn, "SELECT * FROM loket");
+                            while ($data = mysqli_fetch_array($b)) {
+                            ?>
+                            <option value="<?=$data['nama_loket'];?>"><?php echo $data['nama_loket'];?></option>
+                            <?php
+                            }
+                            ?>
+                    <!-- Tambahkan opsi lain sesuai kebutuhan Anda -->
+                </select>
+            </div>
             <div class="mb-2">
                 <button type="submit" class="btn btn-primary btn-block">Login</button>
-            </form>
             </div>
-            <?php
+        </form>
+        <?php
         if (isset($login_error)) {
             echo '<p class="text-danger">' . $login_error . '</p>';
         }

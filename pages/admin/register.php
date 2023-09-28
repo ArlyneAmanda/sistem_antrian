@@ -27,10 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // Enkripsi password
     $role = $_POST['role'];
-    $loket = $_POST['loket'];
 
     // Query SQL untuk menyimpan data ke dalam tabel "user"
-    $sql = "INSERT INTO `user` (`nama`, `username`, `password`, `role`, loket) VALUES ('$nama_lengkap', '$username', '$password', '$role', '$loket')";
+    $sql = "INSERT INTO `user` (`nama`, `username`, `password`, `role`) VALUES ('$nama_lengkap', '$username', '$password', '$role')";
 
 
     if (mysqli_query($conn, $sql)) {
@@ -42,11 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Tutup koneksi database
     mysqli_close($conn);
 }
-$query = "SELECT * FROM loket";
-// $result = $conn->query($query);
-
-// // Tutup koneksi ke database
-// $conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -154,43 +148,12 @@ $query = "SELECT * FROM loket";
         <option value="CS">Customer Service</option>
         <option value="Admin">Admin</option>
         <!-- Tambahkan opsi lain sesuai kebutuhan Anda -->
-      </div>
     </select>
-    <div class="form-group" id="loketDropdown" style="display: none;">
-      <label for="loket"></label>
-      <select class="form-control" id="loket" name="loket">
-        <option value="" selected disabled>Pilih Loket</option>
-        <?php
-        include '../../koneksi.php';
-				//query menampilkan nama unit kerja ke dalam combobox
-		    $b	= mysqli_query($conn, "SELECT * FROM loket");
-				while ($data = mysqli_fetch_array($b)) {
-				?>
-				<option value="<?=$data['nama_loket'];?>"><?php echo $data['nama_loket'];?></option>
-				<?php
-				}
-				?>
-        <!-- Tambahkan opsi lain sesuai kebutuhan Anda -->
-      </select>
-    </div>
       </div>
       <button type="submit" class="btn btn-register">Daftar</button>
     </form>
     <a href="index.php" class=" mt-2 btn btn-secondary">Batal</a>
   </div>
-
-  <script>
-  document.getElementById("role").addEventListener("change", function() {
-    var role = this.value;
-    if (role === "CS") {
-      // Jika role adalah "Customer Service", tampilkan dropdown Loket
-      document.getElementById("loketDropdown").style.display = "block";
-    } else {
-      // Jika role bukan "Customer Service", sembunyikan dropdown Loket
-      document.getElementById("loketDropdown").style.display = "none";
-    }
-  });
-  </script>
 
   <script>
     // Script JavaScript untuk menampilkan/menyembunyikan password

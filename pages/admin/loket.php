@@ -179,7 +179,7 @@ $conn->close();
                         <div class="form-group"> 
                             <label for="namaPetugas">Nama Petugas</label>
                             <select class="form-control" id="namaPetugas" name="namaPetugas" required>
-                                <option> Silahkan Pilih Petugas </option>
+                                <option selected disabled> Silahkan Pilih Petugas </option>
                                 <?php
                                 include '../../koneksi.php';
 				                //query menampilkan nama unit kerja ke dalam combobox
@@ -195,7 +195,7 @@ $conn->close();
                         <div class="form-group">
                             <label for="namaLayanan">Nama Layanan</label>
                             <select class="form-control" id="namaLayanan" name="namaLayanan" required>
-                            <option> Silahkan Pilih Layanan </option>
+                            <option selected disabled> Silahkan Pilih Layanan </option>
                             <?php
                                 include '../../koneksi.php';
 				                //query menampilkan nama unit kerja ke dalam combobox
