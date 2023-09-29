@@ -48,14 +48,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
 
     <!-- Link ke CSS DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    
+    <!-- Tambahkan pustaka Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
+<style>
+        .toast-success {
+        background-color: #20c997 !important;
+        color: white !important;
+    }
+    </style>
 <body>
 <?php include '../../includes/navbar.php'; ?>
     <div class="container mt-5">
         <!-- Baris untuk satu baris dengan dua kotak -->
-        
-
         <!-- Tabel untuk menampilkan data antrean -->
         <table class="table mt-4" id="antreanTable">
             <thead>
@@ -116,6 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                             <label for="namaMenu">Nama Layanan</label>
                             <input type="text" class="form-control" id="namaMenu" name="namaMenu" required>
                         </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
@@ -125,36 +131,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
         </div>
     </div>
 
-    <!-- Modal Notifikasi -->
-    <div class="modal fade" id="notifModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Notifikasi</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Data berhasil ditambahkan!
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php include '../../includes/footer.php'; ?>
-
     <!-- Tambahkan script Bootstrap, jQuery, dan DataTables di sini -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Tambahkan pustaka SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Tambahkan pustaka Toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    <!-- Inisialisasi DataTables -->
+    <!-- Inisialisasi DataTables dan Toastr -->
     <script>
         $(document).ready(function() {
+            // Inisialisasi DataTables
             $('#antreanTable').DataTable();
 
             // Event handler untuk tombol "Tambahkan" pada modal diklik
@@ -170,8 +160,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
                     },
                     success: function(response) {
                         console.log(response); // Ini akan menampilkan response dari server di konsol browser
-                        // Tampilkan modal notifikasi
-                        $('#notifModal').modal('show');
+                        // Tampilkan notifikasi sukses menggunakan Toastr
+                        toastr.success('Data berhasil ditambahkan!');
 
                         // Tutup modal
                         $('#tambahMenuModal').modal('hide');
@@ -191,29 +181,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["kodeLayanan"]) && isse
             // Event handler untuk tombol "Hapus"
             $(".hapus-data").click(function() {
                 var idData = $(this).data("id");
-                if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-                    $.ajax({
-                        type: "POST",
-                        url: "hapus_menu.php", // Ganti dengan path ke script PHP yang akan menghapus data
-                        data: {
-                            id: idData
-                        },
-                        success: function(response) {
-                            // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
-                            console.log(response);
-                            // Refresh halaman setelah 3 detik
-                            setTimeout(function() {
-                                location.reload();
-                            }, 500); // Refresh setelah 3 detik (500 milidetik)
-                        },
-                        error: function(xhr, textStatus, errorThrown) {
-                            console.error(xhr.responseText);
-                            // Tambahkan kode di sini untuk menangani kesalahan
-                        }
-                    });
-                }
+
+                // Tampilkan notifikasi konfirmasi menggunakan SweetAlert
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: 'Apakah Anda yakin ingin menghapus data ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, Hapus',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Jika pengguna mengklik "Ya, Hapus," lakukan penghapusan
+                        $.ajax({
+                            type: "POST",
+                            url: "hapus_menu.php", // Ganti dengan path ke script PHP yang akan menghapus data
+                            data: {
+                                id: idData
+                            },
+                            success: function(response) {
+                                // Tambahkan kode di sini untuk mengupdate tabel atau melakukan tindakan lainnya
+                                console.log(response);
+                                // Tampilkan notifikasi sukses menggunakan SweetAlert
+                                Swal.fire({
+                                    title: 'Sukses',
+                                    text: 'Data berhasil dihapus!',
+                                    icon: 'success'
+                                });
+
+                                // Refresh halaman setelah 3 detik
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 500); // Refresh setelah 3 detik (500 milidetik)
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                console.error(xhr.responseText);
+                                // Tambahkan kode di sini untuk menangani kesalahan
+                            }
+                        });
+                    }
+                });
             });
         });
     </script>
 </body>
 </html>
+
